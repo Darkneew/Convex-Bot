@@ -1,4 +1,4 @@
-module.exports = () => {
+module.exports = async () => {
   const { SlashCommandBuilder, Routes } = require("discord.js");
   const { REST } = require("@discordjs/rest");
   const { token, clientId } = require("./config.json");
@@ -28,7 +28,6 @@ module.exports = () => {
     else mainCommand.addSubcommand(cmd => {
     cmd.setName(name).setDescription(description);
     args.forEach((arg) => {
-      console.log(`add${arg.type}Option`);
       cmd[`add${arg.type}Option`]((option) => {
       option.setName(arg.name).setDescription(arg.description);
       if ("required" in arg) option.setRequired(arg["required"]);
@@ -66,7 +65,7 @@ module.exports = () => {
   commands.map((command) => command.toJSON());
 
   const rest = new REST({ version: "10" }).setToken(token);
-  rest
+  await rest
     .put(Routes.applicationCommands(clientId), { body: commands })
     .then(() => console.log("Commands registered"))
     .catch(console.error);
