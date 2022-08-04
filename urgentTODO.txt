@@ -1,3 +1,0 @@
-debug index.js
-
-add function to ticket.js, community.js, etc..
