@@ -1,0 +1,1 @@
+module.exports.description = "Basic commands to handle your wallet";

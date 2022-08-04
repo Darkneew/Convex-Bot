@@ -18,6 +18,10 @@
   "author": "Darknew",
   "license": "MIT",
   "dependencies": {
-    "node.js": "^0.0.1-security"
+    "@discordjs/rest": "^1.0.1",
+    "discord.js": "^14.1.2",
+    "fs": "^0.0.1-security",
+    "node.js": "^0.0.1-security",
+    "sqlite3": "^5.0.11"
   }
 }
