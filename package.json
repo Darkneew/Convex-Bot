@@ -1,0 +1,23 @@
+{
+  "name": "convexbot",
+  "version": "0.0.1",
+  "description": "Convex's discord bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "bot",
+    "convex",
+    "cryptocurrency",
+    "cryptomoney",
+    "blockchain",
+    "finance"
+  ],
+  "author": "Darknew",
+  "license": "MIT",
+  "dependencies": {
+    "node.js": "^0.0.1-security"
+  }
+}
