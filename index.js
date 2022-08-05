@@ -3,10 +3,8 @@ const prefix = "$"
 
 // Initialization
 const fs = require("fs");
-const sqlite = require("sqlite3");
 const { Client, GatewayIntentBits } = require('discord.js');
 const { token } = require('./config.json');
-const { compileFunction } = require("vm");
 
 // to clean after finishing everything
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildBans, GatewayIntentBits.GuildEmojisAndStickers, GatewayIntentBits.GuildIntegrations, GatewayIntentBits.GuildWebhooks, GatewayIntentBits.GuildInvites, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildPresences, GatewayIntentBits.GuildMessageReactions, GatewayIntentBits.GuildMessageTyping, GatewayIntentBits.DirectMessages, GatewayIntentBits.DirectMessageReactions, GatewayIntentBits.DirectMessageTyping, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildScheduledEvents] });
@@ -66,10 +64,10 @@ client.on('messageCreate', (message) => {
 client.once('ready', () => {
 
 	// maybe remove the register commands later
-	require("./registerCommands")().then((e) => {
-		if (e) throw e;
+//	require("./registerCommands")().then((e) => {
+//		if (e) throw e;
 		console.log('Bot up and running!');
-	})
+//	})
 });
 
 client.login(token);

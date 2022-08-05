@@ -4,13 +4,13 @@ module.exports.args = [
         "type":"String",
         "description":"The type of issue you are having",
         "required": true,
-        "choices":[
-            { "name": "wallet", "value": "wallet"},
-            { "name": "ticket", "value": "ticket"},
-            { "name": "community", "value": "community"},
-            { "name": "server", "value": "server"},
-            { "name": "other", "value": "other"},
-        ]
+        "choices": (() => {
+            let choices = [];
+            require('../../config.json').ticketTags.forEach((v) => {
+                choices.push({"name":v, "value":v})
+            });
+            return choices;
+        }) ()
     }, 
     {
         "name": "issue",
