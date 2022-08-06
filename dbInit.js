@@ -14,16 +14,15 @@ let db = new sqlite.Database('./database.db', (err) => {
                 xp INTEGER CHECK(xp >= 0) DEFAULT 0,
                 interkey TEXT CHECK(length(interkey) = 64),
                 publickey TEXT UNIQUE CHECK(length(publickey) = 32),
-                isanonymous INTEGER CHECK(isanonymous = TRUE OR isanonymous = FALSE) DEFAULT FALSE,
-                opendm INTEGER CHECK(isanonymous = TRUE OR isanonymous = FALSE) DEFAULT TRUE,
+                is-anonym INTEGER CHECK(is-anonym = TRUE OR is-anonym = FALSE) DEFAULT FALSE,
+                open-dm INTEGER CHECK(open-dm = TRUE OR open-dm = FALSE) DEFAULT TRUE,
                 description TEXT DEFAULT ""
             ) [WITHOUT ROWID];
 
             CREATE TABLE tickets (
                 tag TEXT CHECK(tag IN (${config.ticketTags.join(", ")})) NOT NULL,
-                name TEXT NOT NULL,
-                description TEXT NOT NULL,
-                author INTEGER NOT NULL,
+                name TEXT NOT NULL CHECK(length(name)>0),
+                description TEXT DEFAULT "",
                 status TEXT CHECK(tag IN (${config.ticketStatuses.join(", ")})) NOT NULL,
                 author INTEGER CHECK(id >= 0) NOT NULL
             );
@@ -32,13 +31,16 @@ let db = new sqlite.Database('./database.db', (err) => {
                 id INTEGER PRIMARY KEY CHECK(id >= 0),
                 prefix TEXT DEFAULT "$",
                 address INTEGER CHECK(address >= 0),
-                tokenprice INTEGER CHECK(tokenprice >= 0),
+                token-price INTEGER CHECK(token-price >= 0),
             ) [WITHOUT ROWID];
 
             CREATE TABLE guildmarket (
-                type TEXT CHECK(tag IN (${config.guildMarketTypes.join(", ")})) NOT NULL,
-                value TEXT NOT NULL,
-                guild INTEGER NOT NULL
+                type TEXT CHECK(tag IN (${config.types.guildmarket.join(", ")})) NOT NULL,
+                name TEXT NOT NULL CHECK(length(name)>0),
+                guild INTEGER NOT NULL CHECK(guild>=0),
+                price INTEGER CHECK(price>=0),
+                stock INTEGER CHECK(stock>=0),
+                can-sell INTEGER CHECK(can-sell = TRUE OR can-sell = FALSE) DEFAULT TRUE
             );
         `);
     })
