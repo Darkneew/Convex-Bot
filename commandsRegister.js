@@ -67,6 +67,6 @@ module.exports = async () => {
   const rest = new REST({ version: "10" }).setToken(token);
   await rest
     .put(Routes.applicationCommands(clientId), { body: commands })
-    .then(() => console.log("Commands registered"))
+    .then(() => console.log("Commands registered!"))
     .catch(console.error);
 }
