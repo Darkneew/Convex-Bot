@@ -1,5 +1,6 @@
-module.exports = async () => {
-  const sqlite = require("sqlite3");
+const sqlite = require("sqlite3");
+
+module.exports.init = async () => {
   const config = require("./config.json");
   let db = new sqlite.Database("./database.db", (err) => {
     if (err) {
@@ -131,4 +132,12 @@ module.exports = async () => {
       );
     });
   });
+};
+
+module.exports.userInit = (user) => {
+  return null; // todo
+};
+
+module.exports.guildInit = (guild) => {
+  return null; // todo
 };

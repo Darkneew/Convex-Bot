@@ -32,9 +32,6 @@ module.exports.args = [
     }
 ];
 module.exports.description = "Create a ticket. Please do not abuse of this command."
-module.exports.formalAction = (interaction) => {
-    interaction.reply("ticket created! (jk)");
-}
-module.exports.messageAction = (message) => {
-    message.channel.send("ticket created! (jk)");
+module.exports.action = (eventObject, args) => {
+    eventObject.reply("ticket created! (jk)");
 }

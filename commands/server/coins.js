@@ -13,9 +13,6 @@ module.exports.args = [
     }
 ];
 module.exports.description = "Create a token for the server";
-module.exports.formalAction = (interaction) => {
+module.exports.action = (interaction, args) => {
     interaction.reply("token made! (jk)");
-}
-module.exports.messageAction = (message) => {
-    message.channel.send("token made! (jk)");
 }

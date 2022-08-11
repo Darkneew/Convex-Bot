@@ -19,9 +19,6 @@ module.exports.args = [
     }
 ];
 module.exports.description = "Auction one of your assets";
-module.exports.formalAction = (interaction) => {
+module.exports.action = (interaction, args) => {
     interaction.reply("auction made! (jk)");
-}
-module.exports.messageAction = (message) => {
-    message.channel.send("auction made! (jk)");
 }

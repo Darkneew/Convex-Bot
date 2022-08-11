@@ -1,4 +1,4 @@
-module.exports = async () => {
+module.exports.register = async () => {
   const { SlashCommandBuilder, Routes } = require("discord.js");
   const { REST } = require("@discordjs/rest");
   const { token, clientId } = require("./config.json");

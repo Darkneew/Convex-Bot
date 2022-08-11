@@ -3,8 +3,11 @@ const prefix = "$";
 
 // Initialization
 const fs = require("fs");
-const { Client, GatewayIntentBits } = require("discord.js");
-const { token } = require("./config.json");
+const { Client, GatewayIntentBits, EmbedBuilder } = require("discord.js");
+const config = require("./config.json");
+const argUtils = require("./argUtils");
+const commandUtils = require("./commandUtils");
+const dbUtils = require("./dbUtils");
 
 // to clean after finishing everything
 const client = new Client({
@@ -42,11 +45,7 @@ const Commands = (() => {
     let name = y.join(".");
     if (directoryName == name) return;
     if (directoryName != null) name = directoryName + " " + name;
-    let { formalAction, messageAction } = require(module);
-    commands[name] = {
-      formal: formalAction || null,
-      message: messageAction || null,
-    };
+    commands[name] = require(module);
   };
 
   let filenames = fs.readdirSync("./commands/");
@@ -64,7 +63,7 @@ const Commands = (() => {
           );
         else
           console.log(
-            `folder ./commands/${filename}/${_filename} is causing issues`
+            `./commands/${filename}/${_filename} is causing issues`
           );
       });
     }
@@ -72,43 +71,68 @@ const Commands = (() => {
   return commands;
 })();
 
-// reply to formal commands
 client.on("interactionCreate", async (interaction) => {
-  if (!interaction.isCommand()) return;
-  Object.keys(Commands).forEach((cmd) => {
-    if (
-      interaction.commandName == cmd &&
-      Commands[interaction.commandName]["formal"] != null
-    ) {
-      Commands[interaction.commandName]["formal"](interaction);
+  // reply to formal commands
+  // if no account for user create one
+  // if no account for guild create one
+  if (interaction.isCommand()) {
+    let cmd = Commands[interaction.commandName] || Commands[interaction.commandName + " " + interaction.options.data[0].name];
+    if (cmd == undefined) {
+      interaction.channel.send({ embeds: [
+        new EmbedBuilder()
+        .setColor(parseInt(config.colors.error))
+        .setTitle("Error")
+        .setDescription("Internal Error - Command not found")
+      ]});
       return;
+    } 
+    if (interaction.options.data.length > 0 && interaction.options.data[0].type == 1) {
+      cmd.action(interaction, Object.assign({}, ...interaction.options.data[0].options.map(
+        (obj) => ({[obj.name]: obj.value}) 
+      )
+      ));
+    } else {
+      cmd.action(interaction, Object.assign({}, ...interaction.options.data.map(
+        (obj) => ({[obj.name]: obj.value}) 
+      )
+      ));
     }
-    cmdArr = cmd.split(" ");
-    if (cmdArr[0] != interaction.commandName) return;
-    if (interaction.options.data[0].type != 1) return;
-    if (interaction.options.data[0].name == cmdArr[1])
-      Commands[cmd]["formal"](interaction);
-  });
+    
+  }
 });
 
 // reply to text commands
-client.on("messageCreate", (message) => {
+client.on("messageCreate", async (message) => {
+  if (message.content.split(" ").length == 1 && message.mentions.users.first() == client.user) {
+    let embed = new EmbedBuilder()
+      .setColor(config.colors.help)
+      .setTitle("Hi")
+      .setDescription("Use my help command (/help) to get some help whenever you feel lost!");
+      // add prefix if not dm
+    message.channel.send({ embeds: [embed] });
+  }
   if (!message.content.startsWith(prefix)) return;
-  Object.keys(Commands).forEach((name) => {
-    if (Commands[name]["message"] == null) return;
-    if (!message.content.split(prefix).splice(1).join(prefix).startsWith(name))
-      return;
-    Commands[name]["message"](message);
-  });
+  // if no account for user create one
+  // if no account for guild create one
+  let text = message.content.split("").splice(1).join("").split(" ");
+  if (Object.keys(Commands).includes(text[0])) {
+    let arg = await argUtils.process(text.splice(1), Commands[text[0]].args, message);
+    if (arg == null) return;
+    Commands[text[0]].action(message, arg);
+  } else if (Object.keys(Commands).includes(text[0] + " " + text[1])) {
+    let arg = await argUtils.process(text.splice(2), Commands[text[0] + " " + text[1]].args, message);
+    if (arg == null) return;
+    Commands[text[0] + " " + text[1]].action(message, arg);
+  }
 });
 
 client.once("ready", () => {
 	let args = process.argv.splice(2);
 	if (args.includes("--init") || args.includes("-i")) {
 		if (fs.existsSync("./database.db")) fs.unlinkSync("./database.db");
-		require("./commandsRegister")().then((e) => {
+		commandUtils.register().then((e) => {
 			if (e) throw e;
-			require("./dbInit")().then((f) => {
+			dbUtils.init().then((f) => {
 				if (f) throw f;
 				console.log("Bot up and running!");
 			})
@@ -117,4 +141,4 @@ client.once("ready", () => {
 	else console.log("Bot up and running");  
 });
 
-client.login(token);
+client.login(config.token);

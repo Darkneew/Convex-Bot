@@ -122,21 +122,55 @@ When this is done, simply follow these steps:
 
 ```json
 {
-  "token": "your bot token",
-  "clientId": "your client Id",
-  "ticketTags": ["wallet", "ticket", "community", "server", "other"],
-  "botModerators": [],
-  "ticketStatuses": ["submitted", "in process", "solved"],
-  "types": {
-    "guildmarket": ["role", "trophy"],
-    "asset": ["NFT", "Fungible token", "Convex coins", "Memory"],
-    "post": ["NFT", "fungible token", "service", "other"],
-    "notification": ["security", "market", "message", "task"]
-  }
+    "token": "your token",
+    "clientId": "your client id",
+    "ticketTags": [
+        "wallet",
+        "ticket",
+        "community",
+        "server",
+        "other"
+    ],
+    "botModerators": [
+        "your id"
+    ],
+    "ticketStatuses": [
+        "submitted", 
+        "in process", 
+        "solved"
+    ],
+    "types": {
+        "servermarket":[
+            "role",
+            "trophy"
+        ],
+        "asset":[
+            "NFT",
+            "Fungible token",
+            "Convex coins",
+            "Memory"
+        ],
+        "post":[
+            "NFT",
+            "fungible token",
+            "service",
+            "other"
+        ],
+        "notification": [
+            "security",
+            "market",
+            "message",
+            "task"
+        ]
+    },
+    "colors": {
+        "help": "0x0099FF",
+        "error": "0xFF3333"
+    }
 }
 ```
 
-8.  Fill in the token and clientId values
+8.  Fill in the token and clientId values, and modify values as you like
 9.  Run `node index.js --init` to initialize everything
 
 Your bot should at this point be running. In order to run it afterwards, you just have to do `npm start`!
