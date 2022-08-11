@@ -32,6 +32,6 @@ module.exports.args = [
     }
 ];
 module.exports.description = "Create a ticket. Please do not abuse of this command."
-module.exports.action = (eventObject, args) => {
+module.exports.action = (eventObject, args, db) => {
     eventObject.reply("ticket created! (jk)");
 }

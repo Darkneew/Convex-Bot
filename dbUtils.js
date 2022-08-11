@@ -1,6 +1,18 @@
 const sqlite = require("sqlite3");
 
-module.exports.init = async () => {
+module.exports.connect = () => {
+  let db = new sqlite.Database("./database.db", (err) => { 
+    if (err) {
+      console.log("Getting error " + err);
+      exit(1);
+    } else {
+      console.log("Database opened")
+    }
+  });
+  return db;
+};
+
+module.exports.init = () => {
   const config = require("./config.json");
   let db = new sqlite.Database("./database.db", (err) => {
     if (err) {
@@ -132,6 +144,7 @@ module.exports.init = async () => {
       );
     });
   });
+  return db;
 };
 
 module.exports.userInit = (user) => {

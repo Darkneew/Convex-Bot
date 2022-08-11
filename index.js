@@ -32,6 +32,8 @@ const client = new Client({
   ],
 });
 
+var db;
+
 // Getting commands
 const Commands = (() => {
   let commands = {};
@@ -88,12 +90,12 @@ client.on("interactionCreate", async (interaction) => {
     } 
     if (interaction.options.data.length > 0 && interaction.options.data[0].type == 1) {
       cmd.action(interaction, Object.assign({}, ...interaction.options.data[0].options.map(
-        (obj) => ({[obj.name]: obj.value}) 
+        (obj) => ({[obj.name]: obj.value}, db) 
       )
       ));
     } else {
       cmd.action(interaction, Object.assign({}, ...interaction.options.data.map(
-        (obj) => ({[obj.name]: obj.value}) 
+        (obj) => ({[obj.name]: obj.value}, db) 
       )
       ));
     }
@@ -118,11 +120,11 @@ client.on("messageCreate", async (message) => {
   if (Object.keys(Commands).includes(text[0])) {
     let arg = await argUtils.process(text.splice(1), Commands[text[0]].args, message);
     if (arg == null) return;
-    Commands[text[0]].action(message, arg);
+    Commands[text[0]].action(message, arg, db);
   } else if (Object.keys(Commands).includes(text[0] + " " + text[1])) {
     let arg = await argUtils.process(text.splice(2), Commands[text[0] + " " + text[1]].args, message);
     if (arg == null) return;
-    Commands[text[0] + " " + text[1]].action(message, arg);
+    Commands[text[0] + " " + text[1]].action(message, arg, db);
   }
 });
 
@@ -132,13 +134,14 @@ client.once("ready", () => {
 		if (fs.existsSync("./database.db")) fs.unlinkSync("./database.db");
 		commandUtils.register().then((e) => {
 			if (e) throw e;
-			dbUtils.init().then((f) => {
-				if (f) throw f;
-				console.log("Bot up and running!");
-			})
-		  });
+			db = dbUtils.init();
+			console.log("Bot up and running!");
+		});
 	}
-	else console.log("Bot up and running");  
+	else {
+    db = dbUtils.connect();
+    console.log("Bot up and running");  
+  }
 });
 
 client.login(config.token);

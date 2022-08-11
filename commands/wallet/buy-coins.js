@@ -9,7 +9,7 @@ module.exports.args = [
 ];
 module.exports.description = "Buy convex coins with an outer currency.";
 module.exports.details = "Buy convex coins with an outer currency. Use wallet balance to check your balance of Convex coins."
-module.exports.action = (interaction, args) => {
+module.exports.action = (interaction, args, db) => {
     interaction.reply(`bought ${quantity} convex coins!`);
     // todo
 }

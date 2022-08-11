@@ -9,7 +9,7 @@ module.exports.args = [
 ];
 module.exports.description = "Check your level";
 module.exports.details = "Gives your or another user's level. Use this bot to increase your level."
-module.exports.action = (interaction, args) => {
+module.exports.action = (interaction, args, db) => {
     if (Object.keys(args).includes("user")) interaction.reply(`${args["user"].username} has 1 level`);
     else interaction.reply("you have 1 level! (jk)");
     // todo

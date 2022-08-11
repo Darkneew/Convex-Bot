@@ -9,7 +9,7 @@ module.exports.args = [
 ];
 module.exports.description = "Check your balance of Convex coins";
 module.exports.details = "Gives your or another user's balance of Convex coins. Use wallet buy-coins to buy more Convex coins with outer currencies."
-module.exports.action = (interaction, args) => {
+module.exports.action = (interaction, args, db) => {
     interaction.guild.members.fetch()
     if (Object.keys(args).includes("user")) {
         interaction.guild.members.fetch(args["user"]).then((member) => {
