@@ -40,7 +40,7 @@ This module allows you to check and modify your profile.
 - `notifications [list|set]`
 - `session [set|view]`
 - `address user?`
-- `level`
+- `level` - done
 - `anonymous [true|false]`
 - `dm [open|close]`
 - `view user?`
@@ -93,7 +93,7 @@ This module manages tickets. Absolutely do not hesitate to make a ticket if you 
 This module is destined for those who (want to) know more about Convex, or want to participate in Convex's community.
 
 - `feedback`
-- `link` (returns www.convex.world)
+- `link` - done
 - `tutorial`
 - `doc`
 - `licence`
@@ -122,55 +122,29 @@ When this is done, simply follow these steps:
 
 ```json
 {
-    "token": "your token",
-    "clientId": "your client id",
-    "ticketTags": [
-        "wallet",
-        "ticket",
-        "community",
-        "server",
-        "other"
-    ],
-    "botModerators": [
-        "your id"
-    ],
-    "ticketStatuses": [
-        "submitted", 
-        "in process", 
-        "solved"
-    ],
-    "types": {
-        "servermarket":[
-            "role",
-            "trophy"
-        ],
-        "asset":[
-            "NFT",
-            "Fungible token",
-            "Convex coins",
-            "Memory"
-        ],
-        "post":[
-            "NFT",
-            "fungible token",
-            "service",
-            "other"
-        ],
-        "notification": [
-            "security",
-            "market",
-            "message",
-            "task"
-        ]
+  "token": "your token",
+  "clientId": "your client id",
+  "defaultPrefix": "$",
+    "links":{
+        "logo":"your convex logo here"
     },
-    "colors": {
-        "help": "0x0099FF",
-        "error": "0xFF3333"
-    }
+  "ticketTags": ["wallet", "ticket", "community", "server", "other"],
+  "botModerators": ["your id"],
+  "ticketStatuses": ["submitted", "in process", "solved"],
+  "types": {
+    "servermarket": ["role", "trophy"],
+    "asset": ["NFT", "Fungible token", "Convex coins", "Memory"],
+    "post": ["NFT", "fungible token", "service", "other"],
+    "notification": ["security", "market", "message", "task"]
+  },
+  "colors": {
+    "help": "0x0099FF",
+    "error": "0xFF3333"
+  }
 }
 ```
 
-8.  Fill in the token and clientId values, and modify values as you like
+8.  Fill in the token and clientId values, and modify values as you like. Do note that some of these values cannot be changed after doing step 9. Redoing step 9 would apply the new config but reset the database.
 9.  Run `node index.js --init` to initialize everything
 
 Your bot should at this point be running. In order to run it afterwards, you just have to do `npm start`!
@@ -183,75 +157,75 @@ The bot uses a sqlite3 database, containing the following tables:
 
 #### users
 
-|   id    | address |   xp    | interkey | publickey | is_anonym | description | open_dm | password | session_end |
-| :-----: | :-----: | :-----: | :------: | :-------: | :-------: | :---------: | :-----: | :------: | :---------: |
-| INTEGER | INTEGER | INTEGER |   TEXT   |   TEXT    |  INTEGER  |    TEXT     | INTEGER |   TEXT   |    DATE     |
+|  id  | address |   xp    | interkey | publickey | is_anonym | description | open_dm | password | session_end |
+| :--: | :-----: | :-----: | :------: | :-------: | :-------: | :---------: | :-----: | :------: | :---------: |
+| TEXT | INTEGER | INTEGER |   TEXT   |   TEXT    |  INTEGER  |    TEXT     | INTEGER |   TEXT   |    DATE     |
 
 #### ticket
 
-| tag  | name | description | status | author  |  rowid  | timestamp |
-| :--: | :--: | :---------: | :----: | :-----: | :-----: | :-------: |
-| TEXT | TEXT |    TEXT     |  TEXT  | INTEGER | INTEGER |   DATE    |
+| tag  | name | description | status | author |  rowid  | timestamp |
+| :--: | :--: | :---------: | :----: | :----: | :-----: | :-------: |
+| TEXT | TEXT |    TEXT     |  TEXT  |  TEXT  | INTEGER |   DATE    |
 
 #### servers
 
-|   id    | prefix | address | token_price |
-| :-----: | :----: | :-----: | :---------: |
-| INTEGER | STRING | INTEGER |   INTEGER   |
+|  id  | prefix | address | token_price |
+| :--: | :----: | :-----: | :---------: |
+| TEXT | STRING | INTEGER |   INTEGER   |
 
 #### servermarket
 
-| type  | name |  price  | server  |  stock  | can_sell |  rowid  |
-| :---: | :--: | :-----: | :-----: | :-----: | :------: | :-----: |
-| VALUE | TEXT | INTEGER | INTEGER | INTEGER | INTEGER  | INTEGER |
+| type  | name |  price  | server |  stock  | can_sell |  rowid  |
+| :---: | :--: | :-----: | :----: | :-----: | :------: | :-----: |
+| VALUE | TEXT | INTEGER |  TEXT  | INTEGER | INTEGER  | INTEGER |
 
 #### posts
 
-| type | title | description | author  | timestamp |  rowid  |
-| :--: | :---: | :---------: | :-----: | :-------: | :-----: |
-| TEXT | TEXT  |    TEXT     | INTEGER |   DATE    | INTEGER |
+| type | title | description | author | timestamp |  rowid  |
+| :--: | :---: | :---------: | :----: | :-------: | :-----: |
+| TEXT | TEXT  |    TEXT     |  TEXT  |   DATE    | INTEGER |
 
 #### fixedmarket
 
-|  rowid  | author  | id_sell | id_buy  | type_sell | type_buy | quantity_sell | quantity_buy |
-| :-----: | :-----: | :-----: | :-----: | :-------: | :------: | :-----------: | :----------: |
-| INTEGER | INTEGER | INTEGER | INTEGER |   TEXT    |   TEXT   |    INTEGER    |   INTEGER    |
+|  rowid  | author | id_sell | id_buy  | type_sell | type_buy | quantity_sell | quantity_buy |
+| :-----: | :----: | :-----: | :-----: | :-------: | :------: | :-----------: | :----------: |
+| INTEGER |  TEXT  | INTEGER | INTEGER |   TEXT    |   TEXT   |    INTEGER    |   INTEGER    |
 
 #### contracts
 
 |  rowid  | contractor1 | contractor2 |   id1   |   id2   | type1 | type2 | quantity1 | quantity2 | contractid |
 | :-----: | :---------: | :---------: | :-----: | :-----: | :---: | :---: | :-------: | :-------: | :--------: |
-| INTEGER |   INTEGER   |   INTEGER   | INTEGER | INTEGER | TEXT  | TEXT  |  INTEGER  |  INTEGER  |  INTEGER   |
+| INTEGER |    TEXT     |    TEXT     | INTEGER | INTEGER | TEXT  | TEXT  |  INTEGER  |  INTEGER  |  INTEGER   |
 
 #### notifications
 
-|  rowid  | timestamp | name | message |  user   | type |
-| :-----: | :-------: | :--: | :-----: | :-----: | :--: |
-| INTEGER |   DATE    | TEXT |  TEXT   | INTEGER | TEXT |
+|  rowid  | timestamp | name | message | user | type |
+| :-----: | :-------: | :--: | :-----: | :--: | :--: |
+| INTEGER |   DATE    | TEXT |  TEXT   | TEXT | TEXT |
 
 #### admins
 
-| server  | member  |  rowid  |
-| :-----: | :-----: | :-----: |
-| INTEGER | INTEGER | INTEGER |
+| server | member |  rowid  |
+| :----: | :----: | :-----: |
+|  TEXT  |  TEXT  | INTEGER |
 
 #### trophies
 
-|   id    | name |  guild  |
-| :-----: | :--: | :-----: |
-| INTEGER | TEXT | INTEGER |
+|   id    | name | guild |
+| :-----: | :--: | :---: |
+| INTEGER | TEXT | TEXT  |
 
 #### aliases
 
-|  rowid  |  user   | name |   id    | quantity | type |
-| :-----: | :-----: | :--: | :-----: | :------: | :--: |
-| INTEGER | INTEGER | TEXT | INTEGER | INTEGER  | TEXT |
+|  rowid  | user | name |   id    | quantity | type |
+| :-----: | :--: | :--: | :-----: | :------: | :--: |
+| INTEGER | TEXT | TEXT | INTEGER | INTEGER  | TEXT |
 
 #### tasks
 
-|  rowid  | title | description | permanent |  guild  |
-| :-----: | :---: | :---------: | :-------: | :-----: |
-| INTEGER | TEXT  |    TEXT     |  INTEGER  | INTEGER |
+|  rowid  | title | description | permanent | guild |
+| :-----: | :---: | :---------: | :-------: | :---: |
+| INTEGER | TEXT  |    TEXT     |  INTEGER  | TEXT  |
 
 ## Contribution
 

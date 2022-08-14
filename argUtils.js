@@ -21,9 +21,10 @@ const parse = async (type, string, guild) => {
                 id = id.join("");
                 if (isNaN(id)) return null;
                 try {
-                    let id = await guild.members.fetch(id);
+                    await guild.members.fetch(id);
                     return id;
-                } catch {
+                } catch (e) {
+                    throw e;
                     return null;
                 }
             } else return null;
@@ -54,7 +55,7 @@ const parse = async (type, string, guild) => {
                 }
             } else return null;
         default:
-            return null;
+            return undefined;
     }
 }
 
@@ -71,8 +72,17 @@ module.exports.process = async (argsGiven, argsFormat, interaction) => {
         return null;
     }
     while (i < argsGiven.length) {
-        let arg = await parse(argsFormat[i].type, argsGiven[i]);
-        if (arg == null) {
+        let arg = await parse(argsFormat[i].type, argsGiven[i], interaction.guild);
+        if (arg === undefined) {
+            interaction.channel.send({ embeds: [
+                new EmbedBuilder()
+                  .setColor(parseInt(config.colors.error))
+                  .setTitle("Error")
+                  .setDescription(`"An unexpected error happened server-side. ${argsFormat[i].type} is an unknown datatype.`)
+            ]});
+            return null;
+        }
+        if (arg === null) {
             interaction.channel.send({ embeds: [
                 new EmbedBuilder()
                   .setColor(parseInt(config.colors.error))

@@ -31,7 +31,8 @@ module.exports.args = [
         "required": false
     }
 ];
-module.exports.description = "Create a ticket. Please do not abuse of this command."
-module.exports.action = (eventObject, args, db) => {
+module.exports.description = "Create a ticket. Please do not abuse of this command.";
+module.exports.xp = 1;
+module.exports.action = (eventObject, args, dbUtils) => {
     eventObject.reply("ticket created! (jk)");
 }

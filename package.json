@@ -19,9 +19,9 @@
   "license": "MIT",
   "dependencies": {
     "@discordjs/rest": "^1.0.1",
+    "better-sqlite3": "^7.6.2",
     "discord.js": "^14.1.2",
     "fs": "^0.0.1-security",
-    "node.js": "^0.0.1-security",
-    "sqlite3": "^5.0.11"
+    "node.js": "^0.0.1-security"
   }
 }
