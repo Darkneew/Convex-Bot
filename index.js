@@ -1,11 +1,10 @@
 // INITIALIZATION
 const fs = require("fs");
-const { Client, GatewayIntentBits, EmbedBuilder } = require("discord.js");
+const { Client, GatewayIntentBits, EmbedBuilder, Partials } = require("discord.js");
 const config = require("./config.json");
 const dbUtils = require("./dbUtils");
 const argUtils = require("./argUtils");
 const commandUtils = require("./commandUtils");
-const { waitForDebugger } = require("inspector");
 // to clean after finishing everything
 const client = new Client({
   intents: [
@@ -27,49 +26,10 @@ const client = new Client({
     GatewayIntentBits.MessageContent,
     GatewayIntentBits.GuildScheduledEvents,
   ],
+  partials: [
+    Partials.Channel
+  ]
 });
-
-
-// OPEN DATABASE
-// GETTING COMMANDS
-const Commands = (() => {
-  let commands = {};
-
-  let addCommand = (path, nameWithExtension, directoryName) => {
-    let x = path.split(".");
-    x.pop();
-    let module = x.join(".");
-    let y = nameWithExtension.split(".");
-    y.pop();
-    let name = y.join(".");
-    if (directoryName == name) return;
-    if (directoryName != null) commands[directoryName][name] = require(module);
-    else commands[name] = require(module);
-  };
-
-  let filenames = fs.readdirSync("./commands/");
-  filenames.forEach((filename) => {
-    if (filename.endsWith(".js"))
-      addCommand(`./commands/${filename}`, filename, null);
-    else {
-      commands[filename] = {};
-      let _filenames = fs.readdirSync(`./commands/${filename}/`);
-      _filenames.forEach((_filename) => {
-        if (_filename.endsWith(".js"))
-          addCommand(
-            `./commands/${filename}/${_filename}`,
-            _filename,
-            filename
-          );
-        else
-          console.log(
-            `./commands/${filename}/${_filename} is causing issues`
-          );
-      });
-    }
-  });
-  return commands;
-})();
 
 client.on("interactionCreate", async (interaction) => {
   // REPLY TO FORMAL COMMANDS
@@ -153,5 +113,6 @@ if (args.includes("--init") || args.includes("-i")) {
 dbUtils.openDb();
 if (args.includes("--init") || args.includes("-i")) dbUtils.init();
 dbUtils.prepareStatements();
+const Commands = commandUtils.get();
 client.login(config.token);
 

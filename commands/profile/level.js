@@ -29,11 +29,10 @@ const reply = (user, interaction, dbUtils, pronoun) => {
 }
 
 module.exports.action = (interaction, args, dbUtils) => {
-    if (Object.keys(args).includes("user")) 
+    let author = interaction.author || interaction.user
+    if (Object.keys(args).includes("user") && author.id != args["user"]) 
         interaction.guild.members.fetch(args.user).then((member) => {
             reply(member.user, interaction, dbUtils, member.user.username);
         });
-    else {
-        reply(interaction.author || interaction.user, interaction, dbUtils, "Your");
-    };
+    else reply(author, interaction, dbUtils, "Your");
 };

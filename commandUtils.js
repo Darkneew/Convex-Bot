@@ -1,8 +1,9 @@
+const fs = require("fs");
+  
 module.exports.register = async () => {
   const { SlashCommandBuilder, Routes } = require("discord.js");
   const { REST } = require("@discordjs/rest");
   const { token, clientId } = require("./config.json");
-  const fs = require("fs");
 
   let commands = [];
   let addCommand = (path, nameWithExtension, mainCommand) => {
@@ -69,4 +70,43 @@ module.exports.register = async () => {
     .put(Routes.applicationCommands(clientId), { body: commands })
     .then(() => console.log("Commands registered"))
     .catch(console.error);
+}
+
+module.exports.get = () => {
+  let commands = {};
+
+  let addCommand = (path, nameWithExtension, directoryName) => {
+    let x = path.split(".");
+    x.pop();
+    let module = x.join(".");
+    let y = nameWithExtension.split(".");
+    y.pop();
+    let name = y.join(".");
+    if (directoryName == name) return;
+    if (directoryName != null) commands[directoryName][name] = require(module);
+    else commands[name] = require(module);
+  };
+
+  let filenames = fs.readdirSync("./commands/");
+  filenames.forEach((filename) => {
+    if (filename.endsWith(".js"))
+      addCommand(`./commands/${filename}`, filename, null);
+    else {
+      commands[filename] = {};
+      let _filenames = fs.readdirSync(`./commands/${filename}/`);
+      _filenames.forEach((_filename) => {
+        if (_filename.endsWith(".js"))
+          addCommand(
+            `./commands/${filename}/${_filename}`,
+            _filename,
+            filename
+          );
+        else
+          console.log(
+            `./commands/${filename}/${_filename} is causing issues`
+          );
+      });
+    }
+  });
+  return commands;
 }

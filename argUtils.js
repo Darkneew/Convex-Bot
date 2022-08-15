@@ -24,7 +24,6 @@ const parse = async (type, string, guild) => {
                     await guild.members.fetch(id);
                     return id;
                 } catch (e) {
-                    throw e;
                     return null;
                 }
             } else return null;
