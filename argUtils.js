@@ -14,7 +14,7 @@ const parse = async (type, string, guild) => {
             if (string.toLowerCase().startsWith("f")) return false;
             else if (string.toLowerCase().startsWith("t")) return true;
             else return null;
-        case "User": 
+        case "User":
             if (string.startsWith("<@") && string.endsWith(">")) {
                 let id = string.split("").splice(2);
                 id.pop();
@@ -71,6 +71,15 @@ module.exports.process = async (argsGiven, argsFormat, interaction) => {
         return null;
     }
     while (i < argsGiven.length) {
+        if (interaction.guild == null && ["User", "Channel", "Role"].includes(argsFormat[i].type)) {
+            interaction.channel.send({ embeds: [
+                new EmbedBuilder()
+                  .setColor(parseInt(config.colors.error))
+                  .setTitle("Error")
+                  .setDescription(`Cannot recognize mentions in a DM.`)
+            ]});
+            return null;
+        }
         let arg = await parse(argsFormat[i].type, argsGiven[i], interaction.guild);
         if (arg === undefined) {
             interaction.channel.send({ embeds: [

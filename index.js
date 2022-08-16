@@ -62,7 +62,7 @@ client.on("interactionCreate", async (interaction) => {
 });
 
 client.on("messageCreate", async (message) => {
-  let prefix = null;
+  let prefix = "";
   if (message.guild != null) {
     prefix = dbUtils.getPrefix(message.guildId);
   }
@@ -72,12 +72,12 @@ client.on("messageCreate", async (message) => {
       .setColor(config.colors.convex)
       .setTitle("Hi")
       .setDescription("Use my help command (/help) to get some help whenever you feel lost!");
-    if (prefix) embed.addFields({"name":"Prefix", "value":`The prefix for this server is ${prefix}. If you don't want to use discord commands for some reason, you can simply type the command as a message while starting it with ${prefix}.`});
+    if (prefix != "") embed.addFields({"name":"Prefix", "value":`The prefix for this server is ${prefix}. If you don't want to use discord commands for some reason, you can simply type the command as a message while starting it with ${prefix}.`});
     message.channel.send({ embeds: [embed] });
   };
-  if (prefix != null && !message.content.startsWith(prefix)) return;
+  if (prefix != "" && !message.content.startsWith(prefix)) return;
   // REPLY TO TEXT COMMANDS
-  let text = message.content
+  let text = message.content;
   if (prefix != null) text = text.split("").splice(prefix.length).join("").split(" ");
   let cmd = Commands[text[0]];
   if (!cmd) return;
