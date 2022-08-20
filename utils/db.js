@@ -1,4 +1,4 @@
-const config = require("./config.json");
+const config = require("../config.json");
 const Database = require("better-sqlite3");
 
 // OPENING DATABASE
@@ -175,10 +175,10 @@ module.exports.prepareStatements = () => {
   module.exports.userInit = db.prepare("INSERT INTO users(id) VALUES(?)");
   module.exports.guildInit = db.prepare("INSERT INTO servers(id) VALUES(?)");
   module.exports.getUserXP = db.prepare("SELECT xp FROM users WHERE id=?").pluck(true);
-  module.exports.getGuildPrefix = db
-    .prepare("SELECT prefix FROM servers WHERE id=?")
-    .pluck(true);
+  module.exports.getGuildPrefix = db.prepare("SELECT prefix FROM servers WHERE id=?").pluck(true);
   module.exports.setUserXP = db.prepare("UPDATE users SET xp=? WHERE id=?");
+  module.exports.getUserAddress = db.prepare("SELECT address FROM users WHERE id=?").pluck(true);
+  module.exports.getUserAccount = db.prepare("SELECT address, interkey, publickey FROM users WHERE id=?");
 }
 
 module.exports.addXP = (id, amount) => {

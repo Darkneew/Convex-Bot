@@ -10,13 +10,16 @@ module.exports.args = [
 module.exports.description = "Check your balance of Convex coins";
 module.exports.xp = 1;
 module.exports.details = "Gives your or another user's balance of Convex coins. Use wallet buy-coins to buy more Convex coins with outer currencies."
-module.exports.action = (interaction, args, dbUtils) => {
-    interaction.guild.members.fetch()
+module.exports.action = (eventObject, args, dbUtils) => {
+    eventObject.guild.members.fetch()
     if (Object.keys(args).includes("user")) {
-        interaction.guild.members.fetch(args["user"]).then((member) => {
-            interaction.reply(`${member.user.username} has 1 cc`);
+        eventObject.guild.members.fetch(args["user"]).then((member) => {
+            eventObject.reply(`${member.user.username} has 1 cc`);
         });
     }
-    else interaction.reply("you have 1 cc! (jk)");
+    else eventObject.reply("you have 1 cc! (jk)");
     // todo
 }
+
+module.exports.buttons = {};
+module.exports.modals = {};

@@ -36,12 +36,26 @@ module.exports.args = [
 module.exports.description = "A short description of the command";
 module.exports.details = "A detailed description of the command";
 module.exports.xp = 1; // number of xp gained from using this command
-module.exports.action = (eventObject, args, db) => {
+module.exports.action = (eventObject, args, dbUtils) => {
   // eventObject is a message or an interaction,
   // args a dictionnary with args given,
   // and db a connection to the database
   // action to perform
   eventObject.reply(answer); // an answer is needed, even for a few words.
+};
+
+module.exports.buttons = { // list of button actions: can be empty, but does need to exist
+  "customButtonId": (interaction) => {
+    // what should the button do
+    interaction.reply(answer)
+  }
+};
+
+module.exports.modals = { // list of modal actions: can be empty, but does need to exist
+  "customModalId": (interaction) => {
+    // what should the modal do
+    interaction.reply(answer)
+  }
 };
 ```
 

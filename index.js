@@ -2,9 +2,9 @@
 const fs = require("fs");
 const { Client, GatewayIntentBits, EmbedBuilder, Partials } = require("discord.js");
 const config = require("./config.json");
-const dbUtils = require("./dbUtils");
-const argUtils = require("./argUtils");
-const commandUtils = require("./commandUtils");
+const dbUtils = require("./utils/db");
+const argUtils = require("./utils/arg");
+const commandUtils = require("./utils/command");
 // to clean after finishing everything
 const client = new Client({
   intents: [
@@ -32,8 +32,8 @@ const client = new Client({
 });
 
 client.on("interactionCreate", async (interaction) => {
-  // REPLY TO FORMAL COMMANDS
   if (interaction.isCommand()) {
+    // REPLY TO FORMAL COMMANDS
     if (interaction.guild != null) dbUtils.getPrefix(interaction.guild.id);
     let cmd = Commands[interaction.commandName];
     if (interaction.options.data.length > 0 && interaction.options.data[0].type == 1) cmd = cmd[interaction.options.data[0].name];
@@ -58,6 +58,24 @@ client.on("interactionCreate", async (interaction) => {
       )), dbUtils
       );
     }
+  } else if (interaction.isChatInputCommand()) {
+    // REPLY TO MODALS
+    if (Object.keys(Modals).includes(interaction.customId)) Modals[interaction.customId](interaction, dbUtils);
+    else eventObject.reply({ embeds: [
+      new EmbedBuilder()
+        .setColor(parseInt(config.colors.error))
+        .setTitle("Error")
+        .setDescription(`Internal error - ${interaction.customId} not recognized as a modal.`)
+    ]});
+  } else if (interaction.isButton()) {
+    // REPLY TO BUTTONS
+    if (Object.keys(Buttons).includes(interaction.customId)) Buttons[interaction.customId](interaction, dbUtils);
+    else eventObject.reply({ embeds: [
+      new EmbedBuilder()
+        .setColor(parseInt(config.colors.error))
+        .setTitle("Error")
+        .setDescription(`Internal error - ${interaction.customId} not recognized as a button.`)
+    ]});
   }
 });
 
@@ -113,6 +131,6 @@ if (args.includes("--init") || args.includes("-i")) {
 dbUtils.openDb();
 if (args.includes("--init") || args.includes("-i")) dbUtils.init();
 dbUtils.prepareStatements();
-const Commands = commandUtils.get();
+const { Commands, Buttons, Modals } = commandUtils.get();
 client.login(config.token);
 

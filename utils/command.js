@@ -3,7 +3,7 @@ const fs = require("fs");
 module.exports.register = async () => {
   const { SlashCommandBuilder, Routes } = require("discord.js");
   const { REST } = require("@discordjs/rest");
-  const { token, clientId } = require("./config.json");
+  const { token, clientId } = require("../config.json");
 
   let commands = [];
   let addCommand = (path, nameWithExtension, mainCommand) => {
@@ -74,6 +74,8 @@ module.exports.register = async () => {
 
 module.exports.get = () => {
   let commands = {};
+  let buttons = {};
+  let modals = {};
 
   let addCommand = (path, nameWithExtension, directoryName) => {
     let x = path.split(".");
@@ -83,8 +85,15 @@ module.exports.get = () => {
     y.pop();
     let name = y.join(".");
     if (directoryName == name) return;
-    if (directoryName != null) commands[directoryName][name] = require(module);
-    else commands[name] = require(module);
+    let cmd = require(module);
+    if (directoryName != null) commands[directoryName][name] = cmd;
+    else commands[name] = cmd;
+    Object.entries(cmd.buttons).forEach((x) => {
+      buttons[x[0]] = x[1];
+    });
+    Object.entries(cmd.modals).forEach((x) => {
+      modals[x[0]] = x[1];
+    });
   };
 
   let filenames = fs.readdirSync("./commands/");
@@ -108,5 +117,5 @@ module.exports.get = () => {
       });
     }
   });
-  return commands;
+  return { "Commands": commands, "Buttons": buttons, "Modals": modals };
 }

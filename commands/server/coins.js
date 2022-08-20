@@ -14,6 +14,9 @@ module.exports.args = [
 ];
 module.exports.description = "Create a token for the server";
 module.exports.xp = 1;
-module.exports.action = (interaction, args, dbUtils) => {
-    interaction.reply("token made! (jk)");
+module.exports.action = (eventObject, args, dbUtils) => {
+    eventObject.reply("token made! (jk)");
 }
+
+module.exports.buttons = {};
+module.exports.modals = {};

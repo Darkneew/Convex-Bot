@@ -14,11 +14,11 @@ module.exports.description = "Check your level";
 module.exports.xp = 1;
 module.exports.details = "Gives your or another user's level. Use this bot to increase your level.";
 
-const reply = (user, interaction, dbUtils, pronoun) => {
+const reply = (user, eventObject, dbUtils, pronoun) => {
     let xp = dbUtils.getXP(user.id);
     let level = 0;
     if (xp > 1) level = Math.floor(Math.log2(xp));
-    interaction.reply({embeds:[
+    eventObject.reply({embeds:[
         new EmbedBuilder()
         .setTitle(`${pronoun} level is ${level}`)
         .setColor(config.colors.convex)
@@ -28,11 +28,14 @@ const reply = (user, interaction, dbUtils, pronoun) => {
     ]});
 }
 
-module.exports.action = (interaction, args, dbUtils) => {
-    let author = interaction.author || interaction.user
+module.exports.action = (eventObject, args, dbUtils) => {
+    let author = eventObject.author || eventObject.user
     if (Object.keys(args).includes("user") && author.id != args["user"]) 
-        interaction.guild.members.fetch(args.user).then((member) => {
-            reply(member.user, interaction, dbUtils, member.user.username);
+        eventObject.guild.members.fetch(args.user).then((member) => {
+            reply(member.user, eventObject, dbUtils, member.user.username);
         });
-    else reply(author, interaction, dbUtils, "Your");
+    else reply(author, eventObject, dbUtils, "Your");
 };
+
+module.exports.buttons = {};
+module.exports.modals = {};

@@ -24,3 +24,6 @@ module.exports.details = "To get help. Precise a module to get help on a module,
 module.exports.action = (eventObject, args, dbUtils) => {
     eventObject.reply("wip");
 }
+
+module.exports.buttons = {};
+module.exports.modals = {};

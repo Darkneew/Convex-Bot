@@ -10,7 +10,10 @@ module.exports.args = [
 module.exports.description = "Buy convex coins with an outer currency.";
 module.exports.xp = 1;
 module.exports.details = "Buy convex coins with an outer currency. Use wallet balance to check your balance of Convex coins."
-module.exports.action = (interaction, args, dbUtils) => {
-    interaction.reply(`bought ${quantity} convex coins!`);
+module.exports.action = (eventObject, args, dbUtils) => {
+    eventObject.reply(`bought ${quantity} convex coins!`);
     // todo
 }
+
+module.exports.buttons = {};
+module.exports.modals = {};

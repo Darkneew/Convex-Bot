@@ -20,6 +20,9 @@ module.exports.args = [
 ];
 module.exports.description = "Auction one of your assets";
 module.exports.xp = 10;
-module.exports.action = (interaction, args, dbUtils) => {
-    interaction.reply("auction made! (jk)");
+module.exports.action = (eventObject, args, dbUtils) => {
+    eventObject.reply("auction made! (jk)");
 }
+
+module.exports.buttons = {};
+module.exports.modals = {};

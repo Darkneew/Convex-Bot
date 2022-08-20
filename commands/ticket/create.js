@@ -32,7 +32,10 @@ module.exports.args = [
     }
 ];
 module.exports.description = "Create a ticket. Please do not abuse of this command.";
-module.exports.xp = 1;
+module.exports.xp = 100;
 module.exports.action = (eventObject, args, dbUtils) => {
     eventObject.reply("ticket created! (jk)");
 }
+
+module.exports.buttons = {};
+module.exports.modals = {};
