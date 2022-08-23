@@ -36,7 +36,7 @@ Below is a list of the modules there is, with a list of every command in each mo
 This module allows you to check and modify your profile.
 
 - `reset-password`
-- `account [create|change]`
+- `account [create|change]` - done
 - `notifications [list|set]`
 - `session [set|view]`
 - `address user?`
@@ -82,7 +82,7 @@ This module allow you to create an economy directly inside your server. Create y
 
 This module manages tickets. Absolutely do not hesitate to make a ticket if you have an issue/find a bug. If you want to make a more general comment or want to improve the bot, check the advanced section.
 
-- `create`
+- `create` - done
 - `change-status`
 - `open-discussion`
 - `solve`
@@ -118,33 +118,7 @@ When this is done, simply follow these steps:
 4.  Using the link, add your new bot to your server
 5.  Download this code
 6.  In the root directory, run `npm install`. This should install all dependencies
-7.  Create a config.json file following this format :
-
-```json
-{
-  "token": "your token",
-  "clientId": "your client id",
-  "defaultPrefix": "$",
-    "links":{
-        "logo":"your convex logo here"
-    },
-  "ticketTags": ["wallet", "ticket", "community", "server", "other"],
-  "botModerators": ["your id"],
-  "ticketStatuses": ["submitted", "in process", "solved"],
-  "types": {
-    "servermarket": ["role", "trophy"],
-    "asset": ["NFT", "Fungible token", "Convex coins", "Memory"],
-    "post": ["NFT", "fungible token", "service", "other"],
-    "notification": ["security", "market", "message", "task"]
-  },
-  "colors": {
-    "help": "0x0099FF",
-    "error": "0xFF3333"
-  }
-}
-```
-
-8.  Fill in the token and clientId values, and modify values as you like. Do note that some of these values cannot be changed after doing step 9. Redoing step 9 would apply the new config but reset the database.
+8.  Fill in the token and clientId values of `config.json`, and modify other values as you like. Do note that some of these values cannot be changed after doing step 9. Redoing step 9 would apply the new config but reset the database.
 9.  Run `node index.js --init` to initialize everything
 
 Your bot should at this point be running. In order to run it afterwards, you just have to do `npm start`!

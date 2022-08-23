@@ -1,6 +1,28 @@
 const { EmbedBuilder } = require('discord.js');
 const config = require("../config.json");
 
+module.exports.checkSize = (string, size, eventObject, name) => {
+    if (string.length == size) return true;
+    eventObject.reply({ embeds: [
+        new EmbedBuilder()
+          .setColor(parseInt(config.colors.error))
+          .setTitle("Error")
+          .setDescription(`Argument given for ${name} is too long: an argument of size ${string.length} was given, expected of size ${size}`)
+    ]});
+    return false;
+}
+
+module.exports.checkInt = (string, eventObject, name) => {
+    if (!isNaN(string)) return true;
+    eventObject.reply({ embeds: [
+        new EmbedBuilder()
+          .setColor(parseInt(config.colors.error))
+          .setTitle("Error")
+          .setDescription(`${string} was given for argument ${name}, expected an integer.`)
+    ]});
+    return false;
+}
+
 const parse = async (type, string, guild) => {
     switch (type) {
         case "String":
@@ -63,7 +85,7 @@ module.exports.process = async (argsGiven, argsFormat, interaction) => {
     let args = {};
     let i = 0;
     if (argsFormat.length < argsGiven.length) {
-        interaction.channel.send({ embeds: [
+        interaction.reply({ embeds: [
             new EmbedBuilder()
               .setColor(parseInt(config.colors.error))
               .setTitle("Error")
@@ -73,7 +95,7 @@ module.exports.process = async (argsGiven, argsFormat, interaction) => {
     }
     while (i < argsGiven.length) {
         if (interaction.guild == null && ["User", "Channel", "Role"].includes(argsFormat[i].type)) {
-            interaction.channel.send({ embeds: [
+            interaction.reply({ embeds: [
                 new EmbedBuilder()
                   .setColor(parseInt(config.colors.error))
                   .setTitle("Error")
@@ -83,7 +105,7 @@ module.exports.process = async (argsGiven, argsFormat, interaction) => {
         }
         let arg = await parse(argsFormat[i].type, argsGiven[i], interaction.guild);
         if (arg === undefined) {
-            interaction.channel.send({ embeds: [
+            interaction.reply({ embeds: [
                 new EmbedBuilder()
                   .setColor(parseInt(config.colors.error))
                   .setTitle("Error")
@@ -92,7 +114,7 @@ module.exports.process = async (argsGiven, argsFormat, interaction) => {
             return null;
         }
         if (arg === null) {
-            interaction.channel.send({ embeds: [
+            interaction.reply({ embeds: [
                 new EmbedBuilder()
                   .setColor(parseInt(config.colors.error))
                   .setTitle("Error")
@@ -116,7 +138,7 @@ module.exports.process = async (argsGiven, argsFormat, interaction) => {
                 });
             }
             if (!isInChoices) {
-                interaction.channel.send({ embeds: [
+                interaction.reply({ embeds: [
                     new EmbedBuilder()
                       .setColor(parseInt(config.colors.error))
                       .setTitle("Error")
@@ -129,7 +151,7 @@ module.exports.process = async (argsGiven, argsFormat, interaction) => {
         i++;
     }
     if (i < argsFormat.length && argsFormat[i].required) {
-        interaction.channel.send({ embeds: [
+        interaction.reply({ embeds: [
             new EmbedBuilder()
               .setColor(parseInt(config.colors.error))
               .setTitle("Error")

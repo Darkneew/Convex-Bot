@@ -1,0 +1,54 @@
+{
+    "token": "enter your token",
+    "clientId": "enter your client id",
+    "botModerators": [
+        "enter your id"
+    ],
+    "defaultPrefix": "$",
+    "links":{
+        "logo":"https://cdn.discordapp.com/attachments/1007642952039936120/1007645937218375801/logo.png"
+    },
+    "ticketTags": [
+        "wallet",
+        "ticket",
+        "community",
+        "server",
+        "other"
+    ],
+    "ticketStatuses": [
+        "submitted", 
+        "in process", 
+        "solved"
+    ],
+    "types": {
+        "servermarket":[
+            "role",
+            "trophy"
+        ],
+        "asset":[
+            "NFT",
+            "Fungible token",
+            "Convex coins",
+            "Memory"
+        ],
+        "post":[
+            "NFT",
+            "fungible token",
+            "service",
+            "other"
+        ],
+        "notification": [
+            "security",
+            "market",
+            "message",
+            "task"
+        ]
+    },
+    "colors": {
+        "convex": "0x0099FF",
+        "error": "0xFF3333",
+        "question": "0xEA9137",
+        "success": "0x059205"
+    },
+    "convexUrl":"https://convex.world/api/v1/"
+}

@@ -4,7 +4,7 @@
   "description": "Convex's discord bot",
   "main": "index.js",
   "scripts": {
-    "test": "node index.js",
+    "test": "node test.js",
     "start": "node index.js"
   },
   "keywords": [
@@ -19,6 +19,8 @@
   "license": "MIT",
   "dependencies": {
     "@discordjs/rest": "^1.0.1",
+    "@noble/ed25519": "^1.6.1",
+    "axios": "^0.27.2",
     "better-sqlite3": "^7.6.2",
     "discord.js": "^14.1.2",
     "fs": "^0.0.1-security",

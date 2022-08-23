@@ -36,6 +36,7 @@ module.exports.args = [
 module.exports.description = "A short description of the command";
 module.exports.details = "A detailed description of the command";
 module.exports.xp = 1; // number of xp gained from using this command
+module.exports.onlyInteraction = true; // optionnal, default is false, true if the command can only be used through slash commands.
 module.exports.action = (eventObject, args, dbUtils) => {
   // eventObject is a message or an interaction,
   // args a dictionnary with args given,
@@ -45,14 +46,14 @@ module.exports.action = (eventObject, args, dbUtils) => {
 };
 
 module.exports.buttons = { // list of button actions: can be empty, but does need to exist
-  "customButtonId": (interaction) => {
+  "customButtonId": (interaction, dbUtils, args) => {
     // what should the button do
     interaction.reply(answer)
   }
 };
 
 module.exports.modals = { // list of modal actions: can be empty, but does need to exist
-  "customModalId": (interaction) => {
+  "customModalId": (interaction, dbUtils, args) => {
     // what should the modal do
     interaction.reply(answer)
   }
@@ -60,3 +61,26 @@ module.exports.modals = { // list of modal actions: can be empty, but does need 
 ```
 
 Commands can eventually be put inside module folders to put them into these modules. The name of the command should be in lower case
+
+## Custom IDs
+
+Custom IDs are used to identify modals as well as button. 
+
+A custom ID must be lowercase, and without `|`.
+To pass arguments through a custom Id, write your arguments after the usual custom Id separated by a `|` in the modal's or button's custom Id. Arguments passed like that will be given as an array in the 3rd argument of the function. 
+
+Exemple 
+
+```js
+// extract from a code to create a button
+new ButtonBuilder()
+.setCustomId(`createticket|${data.tag}`)
+.setLabel(`Create a ticket`)
+.setStyle(ButtonStyle.Primary)
+
+// then extract from the function which reply to this button
+"createticket": (interaction, dbUtils, args) => {
+  // some code goes in between
+  interaction.reply(`A ticket was created, categorized as ${args[0]}`)
+}
+```

@@ -58,23 +58,29 @@ client.on("interactionCreate", async (interaction) => {
       )), dbUtils
       );
     }
-  } else if (interaction.isChatInputCommand()) {
+  } else if (interaction.isModalSubmit()) {
     // REPLY TO MODALS
-    if (Object.keys(Modals).includes(interaction.customId)) Modals[interaction.customId](interaction, dbUtils);
-    else eventObject.reply({ embeds: [
+    let args = interaction.customId.split("|");
+    if (Object.keys(Modals).includes(args[0])) {
+      Modals[args[0]](interaction, dbUtils, args.splice(1));
+    }
+    else interaction.reply({ embeds: [
       new EmbedBuilder()
         .setColor(parseInt(config.colors.error))
         .setTitle("Error")
-        .setDescription(`Internal error - ${interaction.customId} not recognized as a modal.`)
+        .setDescription(`Internal error - ${args[0]} not recognized as a modal.`)
     ]});
   } else if (interaction.isButton()) {
     // REPLY TO BUTTONS
-    if (Object.keys(Buttons).includes(interaction.customId)) Buttons[interaction.customId](interaction, dbUtils);
-    else eventObject.reply({ embeds: [
+    let args = interaction.customId.split("|");
+    if (Object.keys(Buttons).includes(args[0])) {
+      Buttons[args[0]](interaction, dbUtils, args.splice(1));
+    }
+    else interaction.reply({ embeds: [
       new EmbedBuilder()
         .setColor(parseInt(config.colors.error))
         .setTitle("Error")
-        .setDescription(`Internal error - ${interaction.customId} not recognized as a button.`)
+        .setDescription(`Internal error - ${args[0]} not recognized as a button.`)
     ]});
   }
 });
@@ -100,6 +106,15 @@ client.on("messageCreate", async (message) => {
   let cmd = Commands[text[0]];
   if (!cmd) return;
   cmd = cmd[text[1]] || cmd;
+  if (Object.keys(cmd).includes("onlyInteraction") && cmd["onlyInteraction"]) {
+    message.channel.send({ embeds: [
+      new EmbedBuilder()
+        .setColor(parseInt(config.colors.error))
+        .setTitle("Please use the slash command.")
+        .setDescription("You cannot use this command from a text message. Please use the slash equivalent of this command to use it (replace the prefix by a slash, and select it from the dropdown menu that will appear).")
+    ]});
+    return;
+  }
   let arg = await argUtils.process(text.splice(2), cmd.args, message);
   if (!arg) return;
   dbUtils.addXP(message.author.id, cmd.xp);
@@ -119,7 +134,7 @@ process.on('SIGTERM', () => process.exit(128 + 15));
 process.on('exit', () => {
   dbUtils.db.close();
   console.log("Database closed");
-  console.log("Bot down"); // check when bot is down, or stop it?
+  console.log("Bot down"); 
 });
 
 // START THE BOT

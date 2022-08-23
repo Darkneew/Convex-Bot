@@ -1,9 +1,9 @@
 const fs = require("fs");
+const { SlashCommandBuilder, Routes } = require("discord.js");
+const { REST } = require("@discordjs/rest");
+const { token, clientId } = require("../config.json");
   
 module.exports.register = async () => {
-  const { SlashCommandBuilder, Routes } = require("discord.js");
-  const { REST } = require("@discordjs/rest");
-  const { token, clientId } = require("../config.json");
 
   let commands = [];
   let addCommand = (path, nameWithExtension, mainCommand) => {
@@ -43,22 +43,22 @@ module.exports.register = async () => {
   let filenames = fs.readdirSync("./commands/");
   filenames.forEach((filename) => {
     if (filename.endsWith(".js")) {
-      addCommand(`./commands/${filename}`, filename, null);
+      addCommand(`../commands/${filename}`, filename, null);
       return;
     }
     cmd = new SlashCommandBuilder()
       .setName(filename)
       .setDescription(
-        require(`./commands/${filename}/${filename}`).description
+        require(`../commands/${filename}/${filename}`).description
       );
     let _filenames = fs.readdirSync(`./commands/${filename}/`);
     _filenames.forEach((_filename) => {
       if (_filename == filename + ".js") return;
           if (_filename.endsWith(".js"))
-            addCommand(`./commands/${filename}/${_filename}`, _filename, cmd);
+            addCommand(`../commands/${filename}/${_filename}`, _filename, cmd);
           else
             console.log(
-              `folder ./commands/${filename}/${_filename} is causing issues`
+              `folder ../commands/${filename}/${_filename} is causing issues`
             );
         })
     commands.push(cmd);
@@ -89,9 +89,11 @@ module.exports.get = () => {
     if (directoryName != null) commands[directoryName][name] = cmd;
     else commands[name] = cmd;
     Object.entries(cmd.buttons).forEach((x) => {
+      if (Object.keys(buttons).includes(x[0])) throw new Error(`Conflict between buttons: 2 buttons named ${x[0]}`);
       buttons[x[0]] = x[1];
     });
     Object.entries(cmd.modals).forEach((x) => {
+      if (Object.keys(modals).includes(x[0])) throw new Error(`Conflict between modals: 2 modals named ${x[0]}`);
       modals[x[0]] = x[1];
     });
   };
@@ -99,20 +101,20 @@ module.exports.get = () => {
   let filenames = fs.readdirSync("./commands/");
   filenames.forEach((filename) => {
     if (filename.endsWith(".js"))
-      addCommand(`./commands/${filename}`, filename, null);
+      addCommand(`../commands/${filename}`, filename, null);
     else {
       commands[filename] = {};
       let _filenames = fs.readdirSync(`./commands/${filename}/`);
       _filenames.forEach((_filename) => {
         if (_filename.endsWith(".js"))
           addCommand(
-            `./commands/${filename}/${_filename}`,
+            `../commands/${filename}/${_filename}`,
             _filename,
             filename
           );
         else
           console.log(
-            `./commands/${filename}/${_filename} is causing issues`
+            `../commands/${filename}/${_filename} is causing issues`
           );
       });
     }

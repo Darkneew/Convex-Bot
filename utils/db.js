@@ -14,10 +14,10 @@ module.exports.init = () => {
     `
     CREATE TABLE users (
       id TEXT PRIMARY KEY CHECK(id >= 0),
-      address INTEGER CHECK(address >= -1) DEFAULT -1,
+      address INTEGER UNIQUE CHECK(address >= -1) DEFAULT -1,
       xp INTEGER CHECK(xp >= 0) DEFAULT 0,
       interkey TEXT CHECK(length(interkey) = 64),
-      publickey TEXT UNIQUE CHECK(length(publickey) = 32),
+      publickey TEXT CHECK(length(publickey) = 64),
       is_anonym INTEGER CHECK(is_anonym = TRUE OR is_anonym = FALSE) DEFAULT FALSE,
       open_dm INTEGER CHECK(open_dm = TRUE OR open_dm = FALSE) DEFAULT TRUE,
       description TEXT DEFAULT '',
@@ -34,7 +34,7 @@ module.exports.init = () => {
       description TEXT DEFAULT '',
       status TEXT CHECK(status IN ('${config.ticketStatuses.join(
         "','"
-      )}')),
+      )}')) DEFAULT ${config.ticketStatuses[0]},
       author TEXT CHECK(author >= 0),
       timestamp DATE NOT NULL
     )
@@ -179,6 +179,8 @@ module.exports.prepareStatements = () => {
   module.exports.setUserXP = db.prepare("UPDATE users SET xp=? WHERE id=?");
   module.exports.getUserAddress = db.prepare("SELECT address FROM users WHERE id=?").pluck(true);
   module.exports.getUserAccount = db.prepare("SELECT address, interkey, publickey FROM users WHERE id=?");
+  module.exports.setUserAccount = db.prepare("UPDATE users SET address=?, interkey=?, publickey=? WHERE id=?");
+  module.exports.createTicket = db.prepare("INSERT INTO tickets(tag, name, description, author, timestamp) VALUES(?, ?, ?, ?, ?)");
 }
 
 module.exports.addXP = (id, amount) => {

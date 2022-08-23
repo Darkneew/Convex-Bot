@@ -1,6 +1,6 @@
 node_modules
-config.json
 .vscode
 TODO.txt
 database.db
 better-sqlite3_doc.md
+test.js
