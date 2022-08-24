@@ -1,1 +1,0 @@
-module.exports.description = "To interact with Convex's community";

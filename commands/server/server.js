@@ -1,1 +1,0 @@
-module.exports.description = "To manage your server";

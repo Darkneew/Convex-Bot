@@ -39,7 +39,7 @@ This module allows you to check and modify your profile.
 - `account [create|change]` - done
 - `notifications [list|set]`
 - `session [set|view]`
-- `address user?`
+- `address user?` - done
 - `level` - done
 - `anonymous [true|false]`
 - `dm [open|close]`
@@ -52,7 +52,8 @@ This module allows you to check and modify your profile.
 
 This module gives you the most basic Convex functions, allowing you to manage your wallet and create assets.
 
-- `balance`
+- `balance` - done
+- `transfer`
 - `asset [create|list|transfer]`
 - `memory [buy|sell] quantity`
 - `buy-coins quantity`

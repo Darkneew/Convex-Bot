@@ -1,6 +1,6 @@
 {
     "token": "enter your token",
-    "clientId": "enter your client id",
+    "clientId": "enter your client ID",
     "botModerators": [
         "enter your id"
     ],
