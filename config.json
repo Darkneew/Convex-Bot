@@ -1,8 +1,8 @@
 {
-    "token": "insert token here",
-    "clientId": "insert client id here",
+    "token": "insert the token",
+    "clientId": "insert the client ID",
     "botModerators": [
-        "insert your id here"
+        "insert your id"
     ],
     "convexServer": "734599663713386617",
     "feedbackChannel": "734599664166371333",

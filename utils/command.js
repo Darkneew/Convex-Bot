@@ -12,12 +12,13 @@ module.exports.register = async () => {
     let y = nameWithExtension.split(".");
     y.pop();
     let name = y.join(".");
-    let { args, description } = require(module);
+    let file = require(module);
+    if (Object.keys(file).includes("adminCommand") && file["adminCommand"]) return;
     if (mainCommand == null) {
       let cmd = new SlashCommandBuilder()
         .setName(name)
-        .setDescription(description);
-      args.forEach((arg) => {
+        .setDescription(file.description);
+      file.args.forEach((arg) => {
         cmd[`add${arg.type}Option`]((option) => {
           option.setName(arg.name).setDescription(arg.description);
           if ("required" in arg) option.setRequired(arg["required"]);
@@ -28,8 +29,8 @@ module.exports.register = async () => {
       commands.push(cmd);
     } else
       mainCommand.addSubcommand((cmd) => {
-        cmd.setName(name).setDescription(description);
-        args.forEach((arg) => {
+        cmd.setName(name).setDescription(file.description);
+        file.args.forEach((arg) => {
           cmd[`add${arg.type}Option`]((option) => {
             option.setName(arg.name).setDescription(arg.description);
             if ("required" in arg) option.setRequired(arg["required"]);

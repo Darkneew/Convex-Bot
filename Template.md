@@ -37,6 +37,7 @@ module.exports.description = "A short description of the command";
 module.exports.details = "A detailed description of the command";
 module.exports.xp = 1; // number of xp gained from using this command
 module.exports.onlyInteraction = true; // optionnal, default is false, true if the command can only be used through slash commands.
+module.exports.adminCommand = true; // optionnal, default is false, true if the command can only be used by admins. Admin Command won't be registered as slash commands.
 module.exports.action = (eventObject, args, dbUtils) => {
   // eventObject is a message or an interaction,
   // args a dictionnary with args given,

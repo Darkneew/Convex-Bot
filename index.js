@@ -180,6 +180,19 @@ client.on("messageCreate", async (message) => {
     });
     return;
   }
+  if (Object.keys(cmd).includes("adminCommand") && cmd["adminCommand"] && !config.botModerators.includes(message.author.id)) {
+    message.channel.send({
+      embeds: [
+        new EmbedBuilder()
+          .setColor(parseInt(config.colors.error))
+          .setTitle("Permission insufficiant")
+          .setDescription(
+            "This command can only be used by bot administrators. If you believe you should be able to run this command, please contact the host"
+          ),
+      ],
+    });
+    return;
+  }
   let arg = await argUtils.process(text.splice(2), cmd.args, message);
   if (!arg) return;
   dbUtils.addXP(message.author.id, cmd.xp);

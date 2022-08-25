@@ -65,6 +65,6 @@ const {
               .setTitle("Feedback successfully sent"),
           ]
         })
-    },
+    }
   };
   
