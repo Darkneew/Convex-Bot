@@ -93,13 +93,9 @@ This module manages tickets. Absolutely do not hesitate to make a ticket if you 
 This module is destined for those who (want to) know more about Convex, or want to participate in Convex's community.
 
 - `feedback`
+- `bot-invite` - done
 - `link` - done
-- `bot invite`
-- `tutorial`
-- `doc`
-- `licence`
-- `source-code`
-- `generate-key-pair`
+- `generate-key-pair` - done
 - `execute`
 - `discord-invite` - done
 - `stop` (only bot moderators are allowed to run this)

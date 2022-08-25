@@ -14,7 +14,7 @@ module.exports.getPassword = (dbUtils, interaction, customId, userId, callback) 
       new EmbedBuilder()
         .setTitle("You need to enter your password")
         .setColor(config.colors.convex)
-        .setFooter({ text: "Convex", iconURL: config.links.logo }),
+        .setFooter({ text: "Convex", iconURL: config.links.ressources.logo }),
     ],
     components: [
       new ActionRowBuilder().addComponents(
@@ -33,7 +33,7 @@ module.exports.getAddress = (dbUtils, userid, username, eventObject, isUser = fa
   if (add == undefined || add == -1) {
     let embed = new EmbedBuilder()
       .setColor(parseInt(config.colors.error))
-      .setFooter({ text: "Convex", iconURL: config.links.logo })
+      .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
       .setTitle("Error");
     if (isUser)
       embed.setDescription(

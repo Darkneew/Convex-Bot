@@ -30,7 +30,7 @@ module.exports.details =
 const sendBalance = (eventObject, balance, pronoun) => {
   let embed = new EmbedBuilder()
     .setColor(config.colors.convex)
-    .setFooter({ text: "Convex", iconURL: config.links.logo });
+    .setFooter({ text: "Convex", iconURL: config.links.ressources.logo });
   let comp = [];
   if (pronoun == "You") {
     embed.setTitle(`${pronoun} have a balance of ${balance} coins`);

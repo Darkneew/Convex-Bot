@@ -16,7 +16,7 @@ module.exports.action = async (eventObject, args, dbUtils) => {
             .setColor(config.colors.convex)
             .addFields([{"name":"private key", "value": privateKey},
                 {"name":"public key", "value": publicKey}])
-            .setFooter({ text: "Convex", iconURL: config.links.logo }),
+            .setFooter({ text: "Convex", iconURL: config.links.ressources.logo }),
         ],
         ephemeral: true
     });

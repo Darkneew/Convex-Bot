@@ -21,7 +21,7 @@ const sendaddress = (eventObject, address, pronoun) => {
         embeds: [
             new EmbedBuilder()
             .setColor(config.colors.convex)
-            .setFooter({ text: "Convex", iconURL: config.links.logo })
+            .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
             .setTitle(`${pronoun} address is ${address}`)
         ]
     });

@@ -1,12 +1,25 @@
 {
-    "token": "enter your token",
-    "clientId": "enter your client ID",
+    "token": "MTAwNDU1Mjg3MjgxMTMwMjk1Mg.G1AWLN.LVsvpy1wHEllyhf3q9R_GRs8JJ_Tn05LG8y2TY",
+    "clientId": "1004552872811302952",
     "botModerators": [
-        "enter your id"
+        "496902413240893450"
     ],
+    "convexServer": "734599663713386617",
+    "feedbackChannel": "734599664166371333",
     "defaultPrefix": "$",
     "links":{
-        "logo":"https://cdn.discordapp.com/attachments/1007642952039936120/1007645937218375801/logo.png"
+        "ressources": {
+            "logo":"https://cdn.discordapp.com/attachments/1007642952039936120/1007645937218375801/logo.png"
+        },
+        "commands": {
+            "convex":"https://convex.world",
+            "source-code": "https://github.com/Convex-Dev/convex",
+            "license": "https://github.com/Convex-Dev/convex/blob/master/LICENSE.md",
+            "whitepaper": "https://github.com/Convex-Dev/design/blob/main/papers/convex-whitepaper.pdf",
+            "manifesto": "https://github.com/Convex-Dev/design/blob/main/papers/manifesto.md",
+            "documentation": "https://convex.world/cvm",
+            "sandbox": "https://convex.world/sandbox"
+        }        
     },
     "ticketTags": [
         "wallet",

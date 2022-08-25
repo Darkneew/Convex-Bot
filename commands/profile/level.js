@@ -27,7 +27,7 @@ const reply = (user, eventObject, dbUtils, pronoun) => {
         .setColor(config.colors.convex)
         .setDescription(`with a total of ${xp} xp`)
         .setThumbnail(user.avatarURL())
-        .setFooter({ text: "Convex", iconURL: config.links.logo }),
+        .setFooter({ text: "Convex", iconURL: config.links.ressources.logo }),
     ],
   });
 };

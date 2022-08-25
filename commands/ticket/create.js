@@ -71,7 +71,7 @@ module.exports.modals = {
               "title"
             )}_ was successfully created.`
           )
-          .setFooter({ text: "Convex", iconURL: config.links.logo }),
+          .setFooter({ text: "Convex", iconURL: config.links.ressources.logo }),
       ],
     });
   },

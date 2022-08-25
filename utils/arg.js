@@ -7,7 +7,7 @@ module.exports.checkSize = (string, size, eventObject, name) => {
     embeds: [
       new EmbedBuilder()
         .setColor(parseInt(config.colors.error))
-        .setFooter({ text: "Convex", iconURL: config.links.logo })
+        .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
         .setTitle("Error")
         .setDescription(
           `Argument given for ${name} is too long: an argument of size ${string.length} was given, expected of size ${size}`
@@ -23,7 +23,7 @@ module.exports.checkInt = (string, eventObject, name) => {
     embeds: [
       new EmbedBuilder()
         .setColor(parseInt(config.colors.error))
-        .setFooter({ text: "Convex", iconURL: config.links.logo })
+        .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
         .setTitle("Error")
         .setDescription(
           `${string} was given for argument ${name}, expected an integer.`
@@ -99,7 +99,7 @@ module.exports.process = async (argsGiven, argsFormat, interaction) => {
       embeds: [
         new EmbedBuilder()
           .setColor(parseInt(config.colors.error))
-          .setFooter({ text: "Convex", iconURL: config.links.logo })
+          .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
           .setTitle("Error")
           .setDescription(
             `Too much arguments were given. A maximum of ${argsFormat.length} arguments were expected.`
@@ -117,7 +117,7 @@ module.exports.process = async (argsGiven, argsFormat, interaction) => {
         embeds: [
           new EmbedBuilder()
             .setColor(parseInt(config.colors.error))
-            .setFooter({ text: "Convex", iconURL: config.links.logo })
+            .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
             .setTitle("Error")
             .setDescription(`Cannot recognize mentions in a DM.`),
         ]
@@ -130,7 +130,7 @@ module.exports.process = async (argsGiven, argsFormat, interaction) => {
         embeds: [
           new EmbedBuilder()
             .setColor(parseInt(config.colors.error))
-            .setFooter({ text: "Convex", iconURL: config.links.logo })
+            .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
             .setTitle("Error")
             .setDescription(
               `"An unexpected error happened server-side. ${argsFormat[i].type} is an unknown datatype.`
@@ -144,7 +144,7 @@ module.exports.process = async (argsGiven, argsFormat, interaction) => {
         embeds: [
           new EmbedBuilder()
             .setColor(parseInt(config.colors.error))
-            .setFooter({ text: "Convex", iconURL: config.links.logo })
+            .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
             .setTitle("Error")
             .setDescription(
               `"${argsGiven[i]}" was given for parameter ${argsFormat[i].name}. An argument of type ${argsFormat[i].type} was expected.`
@@ -173,7 +173,7 @@ module.exports.process = async (argsGiven, argsFormat, interaction) => {
           embeds: [
             new EmbedBuilder()
               .setColor(parseInt(config.colors.error))
-              .setFooter({ text: "Convex", iconURL: config.links.logo })
+              .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
               .setTitle("Error")
               .setDescription(
                 `"${argsGiven[i]}" was given for parameter ${
@@ -197,7 +197,7 @@ module.exports.process = async (argsGiven, argsFormat, interaction) => {
       embeds: [
         new EmbedBuilder()
           .setColor(parseInt(config.colors.error))
-          .setFooter({ text: "Convex", iconURL: config.links.logo })
+          .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
           .setTitle("Error")
           .setDescription(
             `Not argument was given for parameter ${argsFormat[i].name}. This argument is mandatory.`

@@ -34,7 +34,7 @@ const sendMemory = (eventObject, account, pronoun) => {
       new EmbedBuilder()
         .setColor(config.colors.convex)
         .setTitle(`${pronoun} memory`)
-        .setFooter({ text: "Convex", iconURL: config.links.logo })
+        .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
         .addFields({ name: "Memory in use", value: `${account.memorySize}` })
         .addFields({ name: "Memory left", value: `${account.allowance}` })
     ],
@@ -69,7 +69,7 @@ module.exports.action = async (eventObject, args, dbUtils) => {
           .setDescription(
             "Use the buttons below to buy or sell memory allowance"
           )
-          .setFooter({ text: "Convex", iconURL: config.links.logo })
+          .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
           .addFields({ name: "Memory in use", value: `${account.memorySize}` })
           .addFields({ name: "Memory left", value: `${account.allowance}` })
       ],

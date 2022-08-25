@@ -10,7 +10,7 @@ const statusIsOk = (status, interaction) => {
       embeds: [
         new EmbedBuilder()
           .setColor(parseInt(config.colors.error))
-          .setFooter({ text: "Convex", iconURL: config.links.logo })
+          .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
           .setTitle("Error")
           .setDescription(
             "Server encountered an error. Please retry after some time"
@@ -23,7 +23,7 @@ const statusIsOk = (status, interaction) => {
       embeds: [
         new EmbedBuilder()
           .setColor(parseInt(config.colors.error))
-          .setFooter({ text: "Convex", iconURL: config.links.logo })
+          .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
           .setTitle("Error")
           .setDescription("Request was incorrectly formatted"),
       ],
@@ -34,7 +34,7 @@ const statusIsOk = (status, interaction) => {
       embeds: [
         new EmbedBuilder()
           .setColor(parseInt(config.colors.error))
-          .setFooter({ text: "Convex", iconURL: config.links.logo })
+          .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
           .setTitle("Error")
           .setDescription("Wrong password"),
       ],
@@ -70,7 +70,7 @@ module.exports.requestMoney = async (dbUtils, interaction, userid, amount) => {
           embeds: [
             new EmbedBuilder()
               .setColor(parseInt(config.colors.error))
-              .setFooter({ text: "Convex", iconURL: config.links.logo })
+              .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
               .setTitle(`Error - ${res.data.errorCode}`)
               .setDescription(res.data.value),
           ],
@@ -80,9 +80,9 @@ module.exports.requestMoney = async (dbUtils, interaction, userid, amount) => {
           embeds: [
             new EmbedBuilder()
               .setColor(parseInt(config.colors.success))
-              .setFooter({ text: "Convex", iconURL: config.links.logo })
+              .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
               .setTitle(`Successfully requested ${res.data.value} coins`),
-          ],
+          ]
         });
     })
     .catch((err) => {
@@ -146,7 +146,7 @@ module.exports.makeTransactionWithPassword = async (
           embeds: [
             new EmbedBuilder()
               .setColor(parseInt(config.colors.error))
-              .setFooter({ text: "Convex", iconURL: config.links.logo })
+              .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
               .setTitle(`Error - Wrong password`),
           ],
         });
@@ -179,7 +179,7 @@ module.exports.makeTransactionWithPassword = async (
                   embeds: [
                     new EmbedBuilder()
                       .setColor(parseInt(config.colors.error))
-                      .setFooter({ text: "Convex", iconURL: config.links.logo })
+                      .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
                       .setTitle(`Error - SEQUENCE`)
                       .setDescription(
                         "There was an error with the network. Please try again in a few moments"
@@ -191,7 +191,7 @@ module.exports.makeTransactionWithPassword = async (
                 embeds: [
                   new EmbedBuilder()
                     .setColor(parseInt(config.colors.error))
-                    .setFooter({ text: "Convex", iconURL: config.links.logo })
+                    .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
                     .setTitle(`Error - ${_res.data.errorCode}`)
                     .setDescription(_res.data.value),
                 ],
@@ -199,7 +199,7 @@ module.exports.makeTransactionWithPassword = async (
           } else {
             let embed = new EmbedBuilder()
               .setColor(parseInt(config.colors.success))
-              .setFooter({ text: "Convex", iconURL: config.links.logo })
+              .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
               .setTitle(`${message} executed successfully`);
             if (verbose == "true")
               embed.addFields({ name: "return value", value: _res.data.value });

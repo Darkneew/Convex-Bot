@@ -50,7 +50,7 @@ const NewOrExistingQuestion = (eventObject) => {
           "Do you want to create a new account, or do you want to register an already existing account?"
         )
         .setColor(config.colors.question)
-        .setFooter({ text: "Convex", iconURL: config.links.logo })
+        .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
     ],
     components: [
       new ActionRowBuilder().addComponents(
@@ -81,7 +81,7 @@ module.exports.action = (eventObject, args, dbUtils) => {
                 `You already have a convex account registered by me (#${a}). Do you still want to continue, and change acount?`
               )
               .setColor(config.colors.question)
-              .setFooter({ text: "Convex", iconURL: config.links.logo }),
+              .setFooter({ text: "Convex", iconURL: config.links.ressources.logo }),
           ],
           components: [
             new ActionRowBuilder().addComponents(
@@ -106,7 +106,7 @@ module.exports.action = (eventObject, args, dbUtils) => {
                 `You don't have any convex account yet. Do you want to create your convex account??`
               )
               .setColor(config.colors.question)
-              .setFooter({ text: "Convex", iconURL: config.links.logo }),
+              .setFooter({ text: "Convex", iconURL: config.links.ressources.logo }),
           ],
           components: [
             new ActionRowBuilder().addComponents(
@@ -156,7 +156,7 @@ module.exports.action = (eventObject, args, dbUtils) => {
                 { name: "Public key", value: `${account.publickey}` },
                 { name: "Interkey", value: `${account.interkey}` },
               ])
-              .setFooter({ text: "Convex", iconURL: config.links.logo }),
+              .setFooter({ text: "Convex", iconURL: config.links.ressources.logo }),
           ],
           ephemeral: true,
         });
@@ -196,7 +196,7 @@ module.exports.buttons = {
               "If you let me do it, you will have to send your private key on discord",
           })
           .setColor(config.colors.question)
-          .setFooter({ text: "Convex", iconURL: config.links.logo }),
+          .setFooter({ text: "Convex", iconURL: config.links.ressources.logo }),
       ],
       components: [
         new ActionRowBuilder().addComponents(
@@ -234,7 +234,7 @@ module.exports.buttons = {
               "If you create your account yourself, you will need to download a small app to do it, but will immediatly be in possession of all your keys.",
           })
           .setColor(config.colors.question)
-          .setFooter({ text: "Convex", iconURL: config.links.logo }),
+          .setFooter({ text: "Convex", iconURL: config.links.ressources.logo }),
       ],
       components: [
         new ActionRowBuilder().addComponents(
@@ -263,7 +263,7 @@ module.exports.buttons = {
             "To create your account, simply click on the `App` button, download the script and run it\nYou can find a manual and the source code (that you can compile yourself) by clicking on the `Manual and Code` button\n\nWhen you are done, click on `Next`"
           )
           .setColor(config.colors.convex)
-          .setFooter({ text: "Convex", iconURL: config.links.logo }),
+          .setFooter({ text: "Convex", iconURL: config.links.ressources.logo }),
       ],
       components: [
         new ActionRowBuilder().addComponents(
@@ -298,7 +298,7 @@ module.exports.buttons = {
             "To generate your interkey, you first need to think of a password. A long and original password is highly recommanded. All characters are authorized. Putting in words from different languages is advised.\n\nAfter, simply click on the `App` button, download the script and run it\nYou can find a manual and the source code (that you can compile yourself) by clicking on the `Manual and Code` button\n\nIf you have difficulties with the links, simply use the buttons below. Be sure to always remember your password. If you loose it, no one will be able to help you!\nWhen you are done, click on `Next` to get the form"
           )
           .setColor(config.colors.convex)
-          .setFooter({ text: "Convex", iconURL: config.links.logo }),
+          .setFooter({ text: "Convex", iconURL: config.links.ressources.logo }),
       ],
       components: [
         new ActionRowBuilder().addComponents(
@@ -333,7 +333,7 @@ module.exports.buttons = {
             "To create an account, you first need to think of a password. A long and original password is highly recommanded. All characters are authorized. Putting in words from different languages is advised."
           )
           .setColor(config.colors.convex)
-          .setFooter({ text: "Convex", iconURL: config.links.logo }),
+          .setFooter({ text: "Convex", iconURL: config.links.ressources.logo }),
       ],
       components: [
         new ActionRowBuilder().addComponents(
@@ -416,7 +416,7 @@ module.exports.buttons = {
             "To generate your interkey, you will need a password. A long and original password is highly recommanded. All characters are authorized. Putting in words from different languages is advised."
           )
           .setColor(config.colors.convex)
-          .setFooter({ text: "Convex", iconURL: config.links.logo }),
+          .setFooter({ text: "Convex", iconURL: config.links.ressources.logo }),
       ],
       components: [
         new ActionRowBuilder().addComponents(
@@ -595,7 +595,7 @@ module.exports.modals = {
         new EmbedBuilder()
           .setTitle("Your account was successfully registered!")
           .setColor(config.colors.success)
-          .setFooter({ text: "Convex", iconURL: config.links.logo }),
+          .setFooter({ text: "Convex", iconURL: config.links.ressources.logo }),
       ]
     });
   },
@@ -642,7 +642,7 @@ module.exports.modals = {
           .setTitle("Your account was successfully created!")
           .addFields({ name: "address", value: `${address}`, "inline?": true })
           .setColor(config.colors.success)
-          .setFooter({ text: "Convex", iconURL: config.links.logo }),
+          .setFooter({ text: "Convex", iconURL: config.links.ressources.logo }),
       ]
     });
   },
@@ -764,7 +764,7 @@ module.exports.modals = {
         new EmbedBuilder()
           .setTitle("Your account was successfully registered!")
           .setColor(config.colors.success)
-          .setFooter({ text: "Convex", iconURL: config.links.logo }),
+          .setFooter({ text: "Convex", iconURL: config.links.ressources.logo }),
       ]
     });
   },
