@@ -5,7 +5,7 @@ const Database = require("better-sqlite3");
 module.exports.openDb = () => {
   module.exports.db = new Database("./database.db");
   console.log("Database opened");
-}
+};
 
 // INIT DATABASE
 module.exports.init = () => {
@@ -25,7 +25,7 @@ module.exports.init = () => {
       session_end DATE
     ) WITHOUT ROWID
   `
-  ).run(); 
+  ).run();
   db.prepare(
     `
     CREATE TABLE tickets (
@@ -39,7 +39,7 @@ module.exports.init = () => {
       timestamp DATE NOT NULL
     )
     `
-  ).run(); 
+  ).run();
   db.prepare(
     `
     CREATE TABLE servers (
@@ -49,13 +49,11 @@ module.exports.init = () => {
       token_price INTEGER CHECK(token_price >= 0)
     ) WITHOUT ROWID
     `
-  ).run(); 
+  ).run();
   db.prepare(
     `
     CREATE TABLE servermarket (
-      type TEXT CHECK(type IN ('${config.types.servermarket.join(
-        "', '"
-      )}')),
+      type TEXT CHECK(type IN ('${config.types.servermarket.join("', '")}')),
       name TEXT CHECK(length(name)>0),
       price INTEGER CHECK(price>=0),
       server TEXT CHECK(server>=0),
@@ -67,9 +65,7 @@ module.exports.init = () => {
   db.prepare(
     `
     CREATE TABLE posts (
-      type TEXT CHECK(type IN ('${config.types.post.join(
-        "', '"
-      )}')),
+      type TEXT CHECK(type IN ('${config.types.post.join("', '")}')),
       title TEXT CHECK(length(title) > 0),
       description TEXT CHECK(length(title) > 0),
       author TEXT CHECK(author >= 0),
@@ -83,12 +79,8 @@ module.exports.init = () => {
       author TEXT CHECK(author >= 0),
       id_sell INTEGER CHECK(id_sell > 0),
       id_buy INTEGER CHECK(id_buy > 0),
-      type_sell TEXT CHECK(type_sell IN ('${config.types.asset.join(
-        "', '"
-      )}')),
-      type_buy TEXT CHECK(type_buy IN ('${config.types.asset.join(
-        "', '"
-      )}')),
+      type_sell TEXT CHECK(type_sell IN ('${config.types.asset.join("', '")}')),
+      type_buy TEXT CHECK(type_buy IN ('${config.types.asset.join("', '")}')),
       quantity_sell INTEGER CHECK(quantity_sell > 0),
       quantity_buy INTEGER CHECK(quantity_buy >= 0)
     )
@@ -101,12 +93,8 @@ module.exports.init = () => {
       contractor2 TEXT CHECK(contractor2 >= 0),
       id1 INTEGER CHECK(id1 > 0),
       id2 INTEGER CHECK(id2 > 0),
-      type1 TEXT CHECK(type1 IN ('${config.types.asset.join(
-        "', '"
-      )}')),
-      type2 TEXT CHECK(type2 IN ('${config.types.asset.join(
-        "', '"
-      )}')),
+      type1 TEXT CHECK(type1 IN ('${config.types.asset.join("', '")}')),
+      type2 TEXT CHECK(type2 IN ('${config.types.asset.join("', '")}')),
       quantity1 INTEGER CHECK(quantity1 > 0),
       quantity2 INTEGER CHECK(quantity2 >= 0),
       contractid INTEGER CHECK(contractid >= 0)
@@ -120,9 +108,7 @@ module.exports.init = () => {
       name TEXT CHECK(length(name) > 0),
       message TEXT DEFAULT '',
       user TEXT CHECK(user >= 0),
-      type TEXT CHECK(type IN ('${config.types.notification.join(
-        "', '"
-      )}'))
+      type TEXT CHECK(type IN ('${config.types.notification.join("', '")}'))
     )
     `
   ).run();
@@ -150,9 +136,7 @@ module.exports.init = () => {
       name TEXT CHECK(length(name) > 0),
       id INTEGER CHECK(id >= 0),
       quantity INTEGER CHECK(quantity >= 0),
-      type TEXT CHECK(type IN ('${config.types.asset.join(
-        "', '"
-      )}'))
+      type TEXT CHECK(type IN ('${config.types.asset.join("', '")}'))
     )
     `
   ).run();
@@ -174,14 +158,29 @@ module.exports.prepareStatements = () => {
   let db = module.exports.db;
   module.exports.userInit = db.prepare("INSERT INTO users(id) VALUES(?)");
   module.exports.guildInit = db.prepare("INSERT INTO servers(id) VALUES(?)");
-  module.exports.getUserXP = db.prepare("SELECT xp FROM users WHERE id=?").pluck(true);
-  module.exports.getGuildPrefix = db.prepare("SELECT prefix FROM servers WHERE id=?").pluck(true);
+  module.exports.getUserXP = db
+    .prepare("SELECT xp FROM users WHERE id=?")
+    .pluck(true);
+  module.exports.getGuildPrefix = db
+    .prepare("SELECT prefix FROM servers WHERE id=?")
+    .pluck(true);
   module.exports.setUserXP = db.prepare("UPDATE users SET xp=? WHERE id=?");
-  module.exports.getUserAddress = db.prepare("SELECT address FROM users WHERE id=?").pluck(true);
-  module.exports.getUserAccount = db.prepare("SELECT address, interkey, publickey FROM users WHERE id=?");
-  module.exports.setUserAccount = db.prepare("UPDATE users SET address=?, interkey=?, publickey=? WHERE id=?");
-  module.exports.createTicket = db.prepare("INSERT INTO tickets(tag, name, description, author, timestamp) VALUES(?, ?, ?, ?, ?)");
-}
+  module.exports.getUserAddress = db
+    .prepare("SELECT address FROM users WHERE id=?")
+    .pluck(true);
+  module.exports.getUserAccount = db.prepare(
+    "SELECT address, interkey, publickey FROM users WHERE id=?"
+  );
+  module.exports.setUserAccount = db.prepare(
+    "UPDATE users SET address=?, interkey=?, publickey=? WHERE id=?"
+  );
+  module.exports.createTicket = db.prepare(
+    "INSERT INTO tickets(tag, name, description, author, timestamp) VALUES(?, ?, ?, ?, ?)"
+  );
+  module.exports.getPassword = db
+  .prepare("SELECT password FROM users WHERE id=?")
+  .pluck(true);
+};
 
 module.exports.addXP = (id, amount) => {
   let xp = module.exports.getUserXP.get(id);
@@ -199,7 +198,7 @@ module.exports.getXP = (id) => {
     xp = 0;
   }
   return xp;
-}
+};
 
 module.exports.getPrefix = (id) => {
   let prefix = module.exports.getGuildPrefix.get(id);

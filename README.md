@@ -35,11 +35,8 @@ Below is a list of the modules there is, with a list of every command in each mo
 
 This module allows you to check and modify your profile.
 
-- `reset-password`
-- `account [create|change]` - done
 - `notifications [list|set]`
 - `session [set|view]`
-- `address user?`
 - `level` - done
 - `anonymous [true|false]`
 - `dm [open|close]`
@@ -52,10 +49,13 @@ This module allows you to check and modify your profile.
 
 This module gives you the most basic Convex functions, allowing you to manage your wallet and create assets.
 
-- `balance`
+- `balance` - done
+- `reset-password`
+- `address user?` - done
+- `account [create|change]` - done
+- `transfer` - done
 - `asset [create|list|transfer]`
-- `memory [buy|sell] quantity`
-- `buy-coins quantity`
+- `memory [buy|sell] quantity` - done
 - https://www.youtube.com/watch?v=2a40mRkcuag everything this supports
 
 #### market
@@ -94,13 +94,14 @@ This module is destined for those who (want to) know more about Convex, or want 
 
 - `feedback`
 - `link` - done
+- `bot invite`
 - `tutorial`
 - `doc`
 - `licence`
 - `source-code`
 - `generate-key-pair`
 - `execute`
-- `discord-invite`
+- `discord-invite` - done
 - `stop` (only bot moderators are allowed to run this)
 
 If at any moment you are lost, feel free to @ the bot.
