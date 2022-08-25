@@ -92,7 +92,7 @@ This module manages tickets. Absolutely do not hesitate to make a ticket if you 
 
 This module is destined for those who (want to) know more about Convex, or want to participate in Convex's community.
 
-- `feedback`
+- `feedback` - done
 - `bot-invite` - done
 - `link` - done
 - `generate-key-pair` - done
