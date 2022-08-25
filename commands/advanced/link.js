@@ -19,8 +19,8 @@ module.exports.args = [
         choices.push({ name: v, value: v });
       });
       return choices;
-    })(),
-  },
+    })()
+  }
 ];
 module.exports.description = "Returns useful links";
 module.exports.xp = 4;

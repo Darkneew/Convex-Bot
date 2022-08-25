@@ -98,7 +98,7 @@ This module is destined for those who (want to) know more about Convex, or want 
 - `generate-key-pair` - done
 - `execute`
 - `discord-invite` - done
-- `stop` (only bot moderators are allowed to run this)
+- `stop` - done
 
 If at any moment you are lost, feel free to @ the bot.
 

@@ -43,7 +43,7 @@ module.exports.register = async () => {
       });
   };
 
-  let filenames = fs.readdirSync("./commands/");
+  const filenames = fs.readdirSync("./commands/");
   filenames.forEach((filename) => {
     if (filename.endsWith(".js")) {
       addCommand(`../commands/${filename}`, filename, null);
@@ -80,15 +80,19 @@ module.exports.get = () => {
   let buttons = {};
   let modals = {};
 
-  let addCommand = (path, nameWithExtension, directoryName) => {
+  const addCommand = (path, nameWithExtension, directoryName) => {
     let x = path.split(".");
     x.pop();
-    let module = x.join(".");
-    let y = nameWithExtension.split(".");
+    const module = x.join(".");
+    const y = nameWithExtension.split(".");
     y.pop();
-    let name = y.join(".");
-    if (directoryName == name) return;
-    let cmd = require(module);
+    const name = y.join(".");
+    const cmd = require(module);
+    if (directoryName == name) {
+      commands[directoryName]["#description"] = cmd.description;
+      commands[directoryName]["#details"] = cmd.details;
+      return;
+    }
     if (directoryName != null) commands[directoryName][name] = cmd;
     else commands[name] = cmd;
     Object.entries(cmd.buttons).forEach((x) => {
@@ -103,12 +107,14 @@ module.exports.get = () => {
     });
   };
 
-  let filenames = fs.readdirSync("./commands/");
+  const filenames = fs.readdirSync("./commands/");
   filenames.forEach((filename) => {
     if (filename.endsWith(".js"))
       addCommand(`../commands/${filename}`, filename, null);
     else {
-      commands[filename] = {};
+      commands[filename] = {
+        "#isModule":true
+      };
       let _filenames = fs.readdirSync(`./commands/${filename}/`);
       _filenames.forEach((_filename) => {
         if (_filename.endsWith(".js"))

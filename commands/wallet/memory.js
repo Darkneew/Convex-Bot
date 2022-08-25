@@ -7,7 +7,7 @@ const {
   EmbedBuilder,
   ModalBuilder,
   TextInputBuilder,
-  TextInputStyle,
+  TextInputStyle
 } = require("discord.js");
 const convexUtils = require("../../utils/convex");
 const config = require("../../config.json");

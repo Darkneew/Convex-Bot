@@ -43,6 +43,18 @@ client.on("interactionCreate", async (interaction) => {
   if (interaction.isCommand()) {
     // REPLY TO FORMAL COMMANDS
     if (interaction.guild != null) dbUtils.getPrefix(interaction.guild.id);
+    if (interaction.commandName == "help") {
+      Commands[interaction.commandName].action(
+        interaction,
+        Object.assign(
+          {},
+          ...interaction.options.data.map((obj) => ({ [obj.name]: obj.value }))
+        ),
+        dbUtils,
+        Commands
+      );
+      return;
+    }
     let cmd = Commands[interaction.commandName];
     if (
       interaction.options.data.length > 0 &&
@@ -91,7 +103,8 @@ client.on("interactionCreate", async (interaction) => {
     if (args[0] == "#maketransaction" && args.length == 5) {
       convexUtils.makeTransactionWithPassword(dbUtils, interaction, args[1], args[2], args[3], args[4], interaction.fields.getTextInputValue("password"));
     } else if (Object.keys(Modals).includes(args[0])) {
-      Modals[args[0]](interaction, dbUtils, args.splice(1));
+      if (args[0] == "help") Modals[args[0]](interaction, dbUtils, args.splice(1), Commands);
+      else Modals[args[0]](interaction, dbUtils, args.splice(1));
     } else
       interaction.reply({
         embeds: [
@@ -121,7 +134,8 @@ client.on("interactionCreate", async (interaction) => {
       interaction.showModal(modal);
     }
     else if (Object.keys(Buttons).includes(args[0])) {
-      Buttons[args[0]](interaction, dbUtils, args.splice(1));
+      if (args[0] == "help") Buttons[args[0]](interaction, dbUtils, args.splice(1), Commands);
+      else Buttons[args[0]](interaction, dbUtils, args.splice(1));
     } else
       interaction.reply({
         embeds: [
@@ -164,11 +178,24 @@ client.on("messageCreate", async (message) => {
   let text = message.content;
   if (prefix != null)
     text = text.split("").splice(prefix.length).join("").split(" ");
+    if (text[0] == "help") {
+      let arg = await argUtils.process(text.splice(1), Commands[text[0]].args, message);
+      Commands[text[0]].action(
+        message,
+        arg,
+        dbUtils,
+        Commands
+      );
+      return;
+    }
+  let toSplice = 1; 
   let cmd = Commands[text[0]];
   if (!cmd) return;
-  cmd = cmd[text[1]] || cmd;
+  cmd = cmd[text[1]];
+  if (cmd) toSplice = 2;
+  else cmd = Commands[text[0]];
   if (Object.keys(cmd).includes("onlyInteraction") && cmd["onlyInteraction"]) {
-    message.channel.send({
+    message.reply({
       embeds: [
         new EmbedBuilder()
           .setColor(parseInt(config.colors.error))
@@ -193,7 +220,7 @@ client.on("messageCreate", async (message) => {
     });
     return;
   }
-  let arg = await argUtils.process(text.splice(2), cmd.args, message);
+  let arg = await argUtils.process(text.splice(toSplice), cmd.args, message);
   if (!arg) return;
   dbUtils.addXP(message.author.id, cmd.xp);
   cmd.action(message, arg, dbUtils);

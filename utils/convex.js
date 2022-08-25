@@ -56,6 +56,43 @@ module.exports.getAccountDetails = async (address) => {
   return (await axios.get(`accounts/${address}`)).data;
 };
 
+module.exports.query = async (interaction, address, source, message, verbose = false, callback = null) => {
+  axios.post("query", {
+    address: address,
+    source: source
+  })
+  .then((res) => {
+    if (Object.keys(res.data).includes("errorCode")) {
+      interaction.reply({
+          embeds: [
+            new EmbedBuilder()
+              .setColor(parseInt(config.colors.error))
+              .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
+              .setTitle(`Error - ${res.data.errorCode}`)
+              .setDescription(res.data.value),
+          ],
+        });
+    } else {
+      if (callback != null) {
+        callback(res.data.value);
+        return;
+      }
+      let embed = new EmbedBuilder()
+        .setColor(parseInt(config.colors.success))
+        .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
+        .setTitle(`${message} executed successfully`);
+      if (verbose)
+        embed.addFields({ name: "return value", value: `${res.data.value}` });
+      interaction.reply({ embeds: [embed] });
+    }
+  })
+  .catch((err) => {
+    if (Object.keys(err).includes("response"))
+      statusIsOk(err.response.status, interaction);
+    else throw err;
+  });
+}
+
 module.exports.requestMoney = async (dbUtils, interaction, userid, amount) => {
   let address = utils.getAddress(dbUtils, userid, null, interaction, true);
   if (address == -1) return;
@@ -202,7 +239,7 @@ module.exports.makeTransactionWithPassword = async (
               .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
               .setTitle(`${message} executed successfully`);
             if (verbose == "true")
-              embed.addFields({ name: "return value", value: _res.data.value });
+              embed.addFields({ name: "return value", value: `${_res.data.value}` });
             interaction.reply({ embeds: [embed] });
           }
         })
