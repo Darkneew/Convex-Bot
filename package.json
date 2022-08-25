@@ -24,6 +24,7 @@
     "better-sqlite3": "^7.6.2",
     "discord.js": "^14.1.2",
     "fs": "^0.0.1-security",
+    "js-sha3": "^0.8.0",
     "node.js": "^0.0.1-security"
   }
 }
