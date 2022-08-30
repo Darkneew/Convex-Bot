@@ -1,4 +1,4 @@
-const utils = require("../../utils/misc");
+const queryUtils = require("../../utils/query");
 const {
   EmbedBuilder,
   ButtonBuilder,
@@ -57,7 +57,7 @@ module.exports.action = async (eventObject, args, dbUtils) => {
   let author = eventObject.author || eventObject.user;
   if (Object.keys(args).includes("user")) {
     eventObject.guild.members.fetch(args["user"]).then(async (member) => {
-      let address = utils.getAddress(
+      let address = queryUtils.getAddress(
         dbUtils,
         member.id,
         member.user.username,
@@ -71,7 +71,7 @@ module.exports.action = async (eventObject, args, dbUtils) => {
       else sendBalance(eventObject, balance, member.user.username);
     });
   } else {
-    let address = utils.getAddress(
+    let address = queryUtils.getAddress(
       dbUtils,
       author.id,
       author.username,
@@ -141,3 +141,5 @@ module.exports.modals = {
     );
   },
 };
+
+module.exports.callbacks = {};

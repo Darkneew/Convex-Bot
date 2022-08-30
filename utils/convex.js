@@ -1,8 +1,9 @@
 const config = require("../config.json");
 const cryptoUtils = require("./crypto");
 const axios = require("axios").create({ baseURL: config.convexUrl });
-const utils = require("./misc");
+const queryUtils = require("./query");
 const { EmbedBuilder } = require("discord.js");
+const lispUtils = require("./lisp");
 
 const statusIsOk = (status, interaction) => {
   if (status == 500) {
@@ -56,45 +57,60 @@ module.exports.getAccountDetails = async (address) => {
   return (await axios.get(`accounts/${address}`)).data;
 };
 
-module.exports.query = async (interaction, address, source, message, verbose = false, callback = null) => {
-  axios.post("query", {
-    address: address,
-    source: source
-  })
-  .then((res) => {
-    if (Object.keys(res.data).includes("errorCode")) {
-      interaction.reply({
+module.exports.query = async (
+  interaction,
+  address,
+  source,
+  message,
+  verbose = false,
+  callback = null
+) => {
+  if (source.startsWith("µ")) {
+    const args = source.split("µ");
+    source = lispUtils[args[1]](...(args.splice(2)));
+  }
+  axios
+    .post("query", {
+      address: address,
+      source: source,
+    })
+    .then((res) => {
+      if (Object.keys(res.data).includes("errorCode")) {
+        interaction.reply({
           embeds: [
             new EmbedBuilder()
               .setColor(parseInt(config.colors.error))
-              .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
+              .setFooter({
+                text: "Convex",
+                iconURL: config.links.ressources.logo,
+              })
               .setTitle(`Error - ${res.data.errorCode}`)
               .setDescription(res.data.value),
           ],
         });
-    } else {
-      if (callback != null) {
-        callback(res.data.value);
-        return;
+      } else {
+        if (callback != null) {
+          callback(res.data.value);
+          return;
+        }
+        let embed = new EmbedBuilder()
+          .setColor(parseInt(config.colors.success))
+          .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
+          .setTitle(`${message} executed successfully`);
+        if (verbose)
+          embed.addFields({ name: "return value", value: `${res.data.value}` });
+        interaction.reply({ embeds: [embed] });
       }
-      let embed = new EmbedBuilder()
-        .setColor(parseInt(config.colors.success))
-        .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
-        .setTitle(`${message} executed successfully`);
-      if (verbose)
-        embed.addFields({ name: "return value", value: `${res.data.value}` });
-      interaction.reply({ embeds: [embed] });
-    }
-  })
-  .catch((err) => {
-    if (Object.keys(err).includes("response"))
-      statusIsOk(err.response.status, interaction);
-    else throw err;
-  });
-}
+    })
+    .catch((err) => {
+      if (Object.keys(err).includes("response"))
+        statusIsOk(err.response.status, interaction);
+      else throw err;
+    });
+};
 
 module.exports.requestMoney = async (dbUtils, interaction, userid, amount) => {
-  let address = utils.getAddress(dbUtils, userid, null, interaction, true);
+  let address = queryUtils.getAddress(dbUtils, userid, null, interaction, true);
   if (address == -1) return;
   axios
     .post("faucet", {
@@ -107,7 +123,10 @@ module.exports.requestMoney = async (dbUtils, interaction, userid, amount) => {
           embeds: [
             new EmbedBuilder()
               .setColor(parseInt(config.colors.error))
-              .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
+              .setFooter({
+                text: "Convex",
+                iconURL: config.links.ressources.logo,
+              })
               .setTitle(`Error - ${res.data.errorCode}`)
               .setDescription(res.data.value),
           ],
@@ -117,9 +136,12 @@ module.exports.requestMoney = async (dbUtils, interaction, userid, amount) => {
           embeds: [
             new EmbedBuilder()
               .setColor(parseInt(config.colors.success))
-              .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
+              .setFooter({
+                text: "Convex",
+                iconURL: config.links.ressources.logo,
+              })
               .setTitle(`Successfully requested ${res.data.value} coins`),
-          ]
+          ],
         });
     })
     .catch((err) => {
@@ -135,14 +157,41 @@ module.exports.makeTransaction = async (
   userid,
   source,
   message,
-  verbose = false
+  verbose = false,
+  callback = null
 ) => {
-  utils.getPassword(
+  if (queryUtils.getAddress(dbUtils, userid, null, interaction, true) == -1) return;
+  if (
+    `#mt|${userid}|${verbose}|${source.split(" ").join("°")}|${message
+      .split(" ")
+      .join("°")}|${callback}`.length > 100
+  ) {
+    interaction.reply({
+      embeds: [
+        new EmbedBuilder()
+          .setColor(parseInt(config.colors.error))
+          .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
+          .setTitle("Error")
+          .setDescription(
+            "Code to execute is too long. Must be less than " +
+              (
+                100 -
+                `#mt|${userid}|${verbose}||${message
+                  .split(" ")
+                  .join("°")}|${callback}`.length
+              ).toString() +
+              " long"
+          ),
+      ],
+    });
+    return;
+  }
+  queryUtils.getPassword(
     dbUtils,
     interaction,
-    `#maketransaction|${userid}|${verbose}|${source
+    `#mt|${userid}|${verbose}|${source.split(" ").join("°")}|${message
       .split(" ")
-      .join("°")}|${message.split(" ").join("°")}`,
+      .join("°")}|${callback}`,
     userid,
     (pwd) => {
       this.makeTransactionWithPassword(
@@ -152,7 +201,8 @@ module.exports.makeTransaction = async (
         verbose,
         source.split(" ").join("°"),
         message.split(" ").join("°"),
-        pwd
+        pwd,
+        callback
       );
     }
   );
@@ -166,9 +216,14 @@ module.exports.makeTransactionWithPassword = async (
   rawsource,
   rawmessage,
   password,
+  callback,
   count = 10
 ) => {
   let source = rawsource.split("°").join(" ");
+  if (source.startsWith("µ")) {
+    const args = source.split("µ");
+    source = lispUtils[args[1]](...(args.splice(2)));
+  }
   let message = rawmessage.split("°").join(" ");
   let account = dbUtils.getUserAccount.get(userid);
   axios
@@ -183,7 +238,10 @@ module.exports.makeTransactionWithPassword = async (
           embeds: [
             new EmbedBuilder()
               .setColor(parseInt(config.colors.error))
-              .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
+              .setFooter({
+                text: "Convex",
+                iconURL: config.links.ressources.logo,
+              })
               .setTitle(`Error - Wrong password`),
           ],
         });
@@ -209,6 +267,7 @@ module.exports.makeTransactionWithPassword = async (
                   rawsource,
                   rawmessage,
                   password,
+                  callback,
                   count - 1
                 );
               else
@@ -216,7 +275,10 @@ module.exports.makeTransactionWithPassword = async (
                   embeds: [
                     new EmbedBuilder()
                       .setColor(parseInt(config.colors.error))
-                      .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
+                      .setFooter({
+                        text: "Convex",
+                        iconURL: config.links.ressources.logo,
+                      })
                       .setTitle(`Error - SEQUENCE`)
                       .setDescription(
                         "There was an error with the network. Please try again in a few moments"
@@ -228,19 +290,32 @@ module.exports.makeTransactionWithPassword = async (
                 embeds: [
                   new EmbedBuilder()
                     .setColor(parseInt(config.colors.error))
-                    .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
+                    .setFooter({
+                      text: "Convex",
+                      iconURL: config.links.ressources.logo,
+                    })
                     .setTitle(`Error - ${_res.data.errorCode}`)
                     .setDescription(_res.data.value),
                 ],
               });
           } else {
-            let embed = new EmbedBuilder()
-              .setColor(parseInt(config.colors.success))
-              .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
-              .setTitle(`${message} executed successfully`);
-            if (verbose == "true")
-              embed.addFields({ name: "return value", value: `${_res.data.value}` });
-            interaction.reply({ embeds: [embed] });
+            if (callback == null) {
+              let embed = new EmbedBuilder()
+                .setColor(parseInt(config.colors.success))
+                .setFooter({
+                  text: "Convex",
+                  iconURL: config.links.ressources.logo,
+                })
+                .setTitle(`${message} executed successfully`);
+              if (verbose == "true")
+                embed.addFields({
+                  name: "return value",
+                  value: `${_res.data.value}`,
+                });
+              interaction.reply({ embeds: [embed] });
+            } else {
+              callback(interaction, dbUtils, _res.data.value);
+            }
           }
         })
         .catch((err) => {

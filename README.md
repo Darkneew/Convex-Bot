@@ -54,7 +54,8 @@ This module gives you the most basic Convex functions, allowing you to manage yo
 - `address user?` - done
 - `account [create|change]` - done
 - `transfer` - done
-- `asset [create|list|transfer]`
+- `fungible` - wip
+- `nft` 
 - `memory [buy|sell] quantity` - done
 - https://www.youtube.com/watch?v=2a40mRkcuag everything this supports
 
@@ -96,7 +97,7 @@ This module is destined for those who (want to) know more about Convex, or want 
 - `bot-invite` - done
 - `link` - done
 - `generate-key-pair` - done
-- `execute`
+- `execute` - done
 - `discord-invite` - done
 - `stop` - done
 
@@ -188,9 +189,9 @@ The bot uses a sqlite3 database, containing the following tables:
 
 #### aliases
 
-|  rowid  | user | name |   id    | quantity | type |
-| :-----: | :--: | :--: | :-----: | :------: | :--: |
-| INTEGER | TEXT | TEXT | INTEGER | INTEGER  | TEXT |
+|  rowid  | user | name |   id    | type |
+| :-----: | :--: | :--: | :-----: | :--: |
+| INTEGER | TEXT | TEXT | INTEGER | TEXT |
 
 #### tasks
 

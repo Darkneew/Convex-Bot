@@ -79,6 +79,7 @@ module.exports.get = () => {
   let commands = {};
   let buttons = {};
   let modals = {};
+  let callbacks = {};
 
   const addCommand = (path, nameWithExtension, directoryName) => {
     let x = path.split(".");
@@ -105,6 +106,11 @@ module.exports.get = () => {
         throw new Error(`Conflict between modals: 2 modals named ${x[0]}`);
       modals[x[0]] = x[1];
     });
+    Object.entries(cmd.callbacks).forEach((x) => {
+      if (Object.keys(callbacks).includes(x[0]))
+        throw new Error(`Conflict between callbacks: 2 callbacks named ${x[0]}`);
+      callbacks[x[0]] = x[1];
+    });
   };
 
   const filenames = fs.readdirSync("./commands/");
@@ -128,5 +134,5 @@ module.exports.get = () => {
       });
     }
   });
-  return { Commands: commands, Buttons: buttons, Modals: modals };
+  return { Commands: commands, Buttons: buttons, Modals: modals, Callbacks: callbacks };
 };

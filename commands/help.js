@@ -321,3 +321,4 @@ module.exports.buttons = {
   help: helpFromArgArray,
 };
 module.exports.modals = {};
+module.exports.callbacks = {};

@@ -1,4 +1,4 @@
-const utils = require("../../utils/misc");
+const queryUtils = require("../../utils/query");
 const argUtils = require("../../utils/arg");
 const {
   ActionRowBuilder,
@@ -45,7 +45,7 @@ module.exports.action = async (eventObject, args, dbUtils) => {
   let author = eventObject.author || eventObject.user;
   if (Object.keys(args).includes("user")) {
     eventObject.guild.members.fetch(args["user"]).then(async (member) => {
-      let address = utils.getAddress(
+      let address = queryUtils.getAddress(
         dbUtils,
         member.id,
         member.user.username,
@@ -58,7 +58,7 @@ module.exports.action = async (eventObject, args, dbUtils) => {
       else sendMemory(eventObject, account, member.user.username + "'s");
     });
   } else {
-    let address = utils.getAddress(dbUtils, author.id, author.username, eventObject, true);
+    let address = queryUtils.getAddress(dbUtils, author.id, author.username, eventObject, true);
     if (address == -1) return;
     let account = await convexUtils.getAccountDetails(address);
     eventObject.reply({
@@ -129,3 +129,5 @@ module.exports.modals = {
       convexUtils.makeTransaction(dbUtils, interaction, interaction.user.id, `(set-memory (- *memory* ${interaction.fields.getTextInputValue("amount")}))`, "Memory transfer");
     }
 };
+
+module.exports.callbacks = {};

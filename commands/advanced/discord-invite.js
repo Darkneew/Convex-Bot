@@ -32,4 +32,5 @@ const {
   
   module.exports.buttons = {};
   module.exports.modals = {};
+  module.exports.callbacks = {};
   

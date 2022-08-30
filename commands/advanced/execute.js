@@ -6,7 +6,7 @@ const {
   TextInputStyle,
 } = require("discord.js");
 const config = require("../../config.json");
-const utils = require("../../utils/misc");
+const queryUtils = require("../../utils/query");
 const convexUtils = require("../../utils/convex");
 
 module.exports.args = [
@@ -52,7 +52,7 @@ module.exports.action = (eventObject, args, dbUtils) => {
   let user = eventObject.user || eventObject.author;
   let address =
     args["address"] ||
-    utils.getAddress(dbUtils, user.id, user.username, eventObject, true);
+    queryUtils.getAddress(dbUtils, user.id, user.username, eventObject, true);
   if (address == -1) return;
   let modal = new ModalBuilder()
     .setCustomId(`execute|${args["mode"]}|${address}`)
@@ -91,3 +91,4 @@ module.exports.modals = {
     }
   },
 };
+module.exports.callbacks = {};

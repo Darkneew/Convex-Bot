@@ -1,0 +1,4 @@
+module.exports.deployTrustMonitor = () => "(do (import convex.trust :as trust) (deploy (trust/build-whitelist {:controller *address* :whitelist [*address*]})))";
+module.exports.createFungible = (supply) => `(do (import convex.fungible :as fun) (deploy (fun/build-token {:initial-holder *address* :supply ${supply}})))`; 
+module.exports.transferFungible = (fungible, amount, receiver) => `(do (import convex.fungible :as fun) (fun/transfer #${fungible} #${receiver} ${amount}))`; 
+module.exports.getFungibleBalance = (fungible, address) => `(do (import convex.fungible :as fun) (fun/balance #${fungible} #${address}))`;

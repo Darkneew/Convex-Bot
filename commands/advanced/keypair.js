@@ -24,3 +24,4 @@ module.exports.action = async (eventObject, args, dbUtils) => {
 
 module.exports.buttons = {};
 module.exports.modals = {};
+module.exports.callbacks = {};

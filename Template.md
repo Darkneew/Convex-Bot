@@ -59,9 +59,18 @@ module.exports.modals = { // list of modal actions: can be empty, but does need 
     interaction.reply(answer)
   }
 };
+
+module.exports.callbacks = { // list of callbacks: can be empty, but does need to exist
+  "name": (interaction, dbUtils, arg) => {
+    interaction.reply(answer)
+  }
+};
 ```
 
 Commands can eventually be put inside module folders to put them into these modules. The name of the command should be in lower case
+
+Callbacks are functions globally declared in index.js (inside Callbacks)
+They are for exemple used as optional argument in the convexUtils.makeTransaction function (in which arg is the value returned by the CVM)
 
 ## Custom IDs
 
@@ -85,3 +94,11 @@ new ButtonBuilder()
   interaction.reply(`A ticket was created, categorized as ${args[0]}`)
 }
 ```
+
+## Code in makeTransaction
+
+The source given to makeTransaction has a limited size, due to the fact that customIds can't be more than 100 characters.
+
+To solve this issue, code can be pre-declared in utils/lisp.js
+Passing a string following this format: `µnameµarg1µarg2...` (where name is the name of the function in lisp.js, and arg1, arg2, etc.. are the arguments to give to the function) will make the value returned by the function execute instead of the source itself.
+

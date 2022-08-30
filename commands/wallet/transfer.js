@@ -4,7 +4,7 @@ const {
   TextInputBuilder,
   TextInputStyle
 } = require("discord.js");
-const utils = require("../../utils/misc");
+const queryUtils = require("../../utils/query");
 const argUtils = require("../../utils/arg");
 const convexUtils = require("../../utils/convex");
 
@@ -64,7 +64,7 @@ module.exports.modals = {
       return;
     if (args.length > 0) {
       interaction.guild.members.fetch(args[0]).then((member) => {
-        let address = utils.getAddress(dbUtils, member.id, member.user.username, interaction);
+        let address = queryUtils.getAddress(dbUtils, member.id, member.user.username, interaction);
         convexUtils.makeTransaction(
           dbUtils,
           interaction,
@@ -92,3 +92,5 @@ module.exports.modals = {
     }
   },
 };
+
+module.exports.callbacks = {};

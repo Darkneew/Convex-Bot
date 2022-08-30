@@ -769,3 +769,4 @@ module.exports.modals = {
     });
   },
 };
+module.exports.callbacks = {};

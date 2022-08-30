@@ -135,8 +135,7 @@ module.exports.init = () => {
       user TEXT CHECK(user >= 0),
       name TEXT CHECK(length(name) > 0),
       id INTEGER CHECK(id >= 0),
-      quantity INTEGER CHECK(quantity >= 0),
-      type TEXT CHECK(type IN ('${config.types.asset.join("', '")}'))
+      type TEXT CHECK(type IN ('nft', 'fungible'))
     )
     `
   ).run();
@@ -180,6 +179,11 @@ module.exports.prepareStatements = () => {
   module.exports.getPassword = db
   .prepare("SELECT password FROM users WHERE id=?")
   .pluck(true);
+  module.exports.newAlias = db.prepare("INSERT INTO aliases(user, name, id, type) VALUES(?, ?, ?, ?)");
+  module.exports.searchAlias = db.prepare("SELECT id FROM aliases WHERE user=? AND name=?").pluck(true);
+  module.exports.getFungibleAliases = db.prepare("SELECT id, name FROM aliases WHERE user=? AND type='fungible'");
+  module.exports.removeAliasByAddress = db.prepare("DELETE FROM aliases WHERE id=?");
+  module.exports.removeAliasByName = db.prepare("DELETE FROM aliases WHERE name=?");
 };
 
 module.exports.addXP = (id, amount) => {

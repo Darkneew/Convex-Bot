@@ -67,4 +67,5 @@ const {
         })
     }
   };
+  module.exports.callbacks = {};
   

@@ -19,7 +19,7 @@ module.exports.getPassword = (dbUtils, interaction, customId, userId, callback) 
     components: [
       new ActionRowBuilder().addComponents(
         new ButtonBuilder()
-          .setCustomId(`#getpassword|${customId}`)
+          .setCustomId(`#gp|${customId}`)
           .setLabel("Enter password")
           .setStyle(ButtonStyle.Primary)
       ),

@@ -100,8 +100,8 @@ client.on("interactionCreate", async (interaction) => {
   } else if (interaction.isModalSubmit()) {
     // REPLY TO MODALS
     let args = interaction.customId.split("|");
-    if (args[0] == "#maketransaction" && args.length == 5) {
-      convexUtils.makeTransactionWithPassword(dbUtils, interaction, args[1], args[2], args[3], args[4], interaction.fields.getTextInputValue("password"));
+    if (args[0] == "#mt" && args.length == 6) {
+      convexUtils.makeTransactionWithPassword(dbUtils, interaction, args[1], args[2], args[3], args[4], interaction.fields.getTextInputValue("password"), Callbacks[args[5]]);
     } else if (Object.keys(Modals).includes(args[0])) {
       if (args[0] == "help") Modals[args[0]](interaction, dbUtils, args.splice(1), Commands);
       else Modals[args[0]](interaction, dbUtils, args.splice(1));
@@ -119,7 +119,7 @@ client.on("interactionCreate", async (interaction) => {
   } else if (interaction.isButton()) {
     // REPLY TO BUTTONS
     let args = interaction.customId.split("|");
-    if (args[0] == "#getpassword") {
+    if (args[0] == "#gp") {
       let modal = new ModalBuilder()
         .setCustomId(args.splice(1).join("|"))
         .setTitle("Enter your password");
@@ -248,5 +248,5 @@ if (args.includes("--init") || args.includes("-i") || args.includes("--reset-com
 dbUtils.openDb();
 if (args.includes("--init") || args.includes("-i")) dbUtils.init();
 dbUtils.prepareStatements();
-const { Commands, Buttons, Modals } = commandUtils.get();
+const { Commands, Buttons, Modals, Callbacks } = commandUtils.get();
 client.login(config.token);

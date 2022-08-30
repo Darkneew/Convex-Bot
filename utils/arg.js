@@ -11,24 +11,24 @@ module.exports.checkSize = (string, size, eventObject, name) => {
         .setTitle("Error")
         .setDescription(
           `Argument given for ${name} is too long: an argument of size ${string.length} was given, expected of size ${size}`
-        ),
-    ],
+        )
+    ]
   });
   return false;
 };
 
-module.exports.checkInt = (string, eventObject, name) => {
+module.exports.checkInt = (string, eventObject, name, description = null) => {
   if (!isNaN(string)) return true;
+  let embed = new EmbedBuilder()
+  .setColor(parseInt(config.colors.error))
+  .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
+  .setTitle("Error")
+  .setDescription(
+    `${string} was given for argument ${name}, expected an integer.`
+  );
+  if (description != null) embed.setDescription(description);
   eventObject.reply({
-    embeds: [
-      new EmbedBuilder()
-        .setColor(parseInt(config.colors.error))
-        .setFooter({ text: "Convex", iconURL: config.links.ressources.logo })
-        .setTitle("Error")
-        .setDescription(
-          `${string} was given for argument ${name}, expected an integer.`
-        ),
-    ],
+    embeds: [ embed ]
   });
   return false;
 };
